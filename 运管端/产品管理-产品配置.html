@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>旅惠保 · 产品配置管理</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",Arial,sans-serif;font-size:14px;color:#252b35;background:#f5f7fa;--primary:#4c68c2;--primary-hover:#3c59b6;--border:#e8ebf0;--muted:#8993a4;--surface:#fff;--danger:#e2595b;--success:#35a875;--radius:5px}
+*{box-sizing:border-box}body{margin:0;min-width:770px}button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed}button:focus-visible,input:focus-visible,.drag-handle:focus-visible{outline:2px solid #9fb1f0;outline-offset:2px}button{user-select:none}
+.shell{max-width:1540px;margin:0 auto;padding:25px 28px 50px;min-height:100vh;display:flex;flex-direction:column}.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.page-title{font-size:20px;font-weight:600;line-height:30px;margin:0;letter-spacing:.1px}.workspace{display:grid;grid-template-columns:235px minmax(0,1fr);gap:16px;align-items:stretch;flex:1}.side-panel,.main-panel{background:#fff;border:1px solid var(--border);border-radius:6px;box-shadow:0 1px 2px #11182705}.side-panel{padding:20px 12px;min-height:570px;position:sticky;top:18px}.nav-group+.nav-group{margin-top:24px}.nav-head{font-size:12px;color:#98a1b0;margin:0 10px 10px;font-weight:500}.nav-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border:none;border-radius:5px;background:transparent;text-align:left;color:#4d5869;line-height:20px;min-height:40px;transition:background .15s,color .15s}.nav-btn:hover{background:#f5f7fc}.nav-btn.active{color:var(--primary);background:#edf2fc;font-weight:600}.nav-label{display:flex;align-items:center;gap:3px;white-space:nowrap}.required-star{color:var(--danger);font-weight:500;margin-left:2px}.status{flex:0 0 auto;display:grid;place-items:center;width:16px;height:16px}.status.pending{color:#c8ced9}.status.done{color:var(--success)}.status svg{width:15px;height:15px}
+.main-panel{min-height:570px;display:flex;flex-direction:column;overflow:hidden}.main-head{padding:22px 27px 19px;border-bottom:1px solid #eff1f4;display:flex;align-items:center;justify-content:space-between;gap:12px}.main-head h2{font-size:17px;font-weight:600;line-height:25px;margin:0}.state-label{font-size:12px;display:flex;gap:6px;align-items:center;color:#9199a6}.state-label.unsaved{color:#b58a3c}.state-label.saved{color:#36a273}.state-dot{border-radius:50%;width:6px;height:6px;background:currentColor;display:inline-block}.main-body{padding:26px 28px 28px;min-height:435px;flex:1}.section-title{font-size:14px;font-weight:600;margin:0 0 20px}.form-wrap{max-width:955px}.grid-head,.scheme-row{display:grid;grid-template-columns:30px minmax(150px,1fr) minmax(250px,1.6fr) 28px;gap:16px;align-items:start}.grid-head{margin-bottom:10px}.field-label{font-size:13px;color:#596375;font-weight:500;line-height:20px}.scheme-list{display:flex;flex-direction:column;gap:12px}.scheme-row{border:1px solid #e8ebf1;border-radius:6px;padding:14px 14px 14px 11px;background:#fff;transition:background .12s,border-color .12s,box-shadow .12s}.scheme-row:hover{border-color:#d7ddea}.scheme-row.dragging{opacity:.35;transform:scale(.994)}.scheme-row.drop-before{box-shadow:0 -3px 0 var(--primary)}.scheme-row.drop-after{box-shadow:0 3px 0 var(--primary)}.drag-handle{width:28px;height:33px;display:flex;align-items:center;justify-content:center;color:#aeb7c4;cursor:grab;touch-action:none;border:0;background:transparent;border-radius:4px}.drag-handle:hover{color:#6b7c96;background:#f2f5fa}.drag-handle:active{cursor:grabbing}.drag-handle svg{width:16px;height:18px}.input-box{position:relative;min-width:0}.input-box input{height:34px;line-height:32px;border:1px solid #d9dfe8;border-radius:5px;padding:0 68px 0 11px;outline:none;width:100%;background:#fff;color:#2d3645;transition:border .15s,box-shadow .15s}.input-box input::placeholder{color:#aeb6c2}.input-box input:hover{border-color:#97a9db}.input-box input:focus{border-color:#4c68c2;box-shadow:0 0 0 2px #4c68c21b}.input-box input.invalid{border-color:#e27c7e}.input-box input.invalid:focus{box-shadow:0 0 0 2px #e2595b18}.counter{position:absolute;right:12px;top:8px;color:#a4adba;font-size:12px;line-height:18px;pointer-events:none;font-variant-numeric:tabular-nums}.counter.limit{color:#7b879b}.field-error{margin-top:6px;font-size:12px;color:#d34848;line-height:18px}.remove-btn{width:28px;height:34px;display:grid;place-items:center;color:#a5adba;background:transparent;border:0;border-radius:4px}.remove-btn svg{width:16px;height:16px}.remove-btn:hover:not(:disabled){color:#e05b60;background:#fff1f0}.remove-btn:disabled{opacity:.35}.add-btn{width:100%;height:36px;margin-top:14px;background:#fff;border:1px dashed #cbd3df;border-radius:5px;color:#5b6b84;display:flex;align-items:center;justify-content:center;gap:7px}.add-btn:hover{color:var(--primary);border-color:var(--primary);background:#f9fbff}.add-btn svg{width:14px;height:14px}.main-foot{border-top:1px solid #eff1f4;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:15px 28px;background:#fff;min-height:68px}.btn{border:1px solid #d9dfe8;color:#475467;background:#fff;border-radius:5px;height:34px;padding:0 18px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:500}.btn:hover:not(:disabled){border-color:var(--primary);color:var(--primary)}.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}.btn.primary:hover:not(:disabled){background:var(--primary-hover);border-color:var(--primary-hover);color:#fff}.btn:disabled{opacity:.48}.btn.primary:disabled{background:#a8b7e6;border-color:#a8b7e6;color:#fff}.placeholder{min-height:390px}.dependent-empty{display:flex;min-height:388px;align-items:center;justify-content:center;flex-direction:column;gap:12px;text-align:center}.empty-graphic{width:60px;height:60px;border-radius:50%;background:#f4f6fb;display:grid;place-items:center;color:#a3b0c8;margin-bottom:4px}.empty-graphic svg{width:28px;height:28px}.empty-title{font-size:15px;font-weight:500;margin:0}.empty-desc{font-size:13px;color:#8b95a4;margin:0 0 6px}.quiet-placeholder{min-height:380px}
+.toast-stack{position:fixed;z-index:1000;top:28px;left:50%;transform:translateX(-50%);pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:8px}.toast{display:flex;align-items:center;gap:9px;background:#fff;box-shadow:0 4px 16px #1e305727;border:1px solid #e5e9ef;padding:11px 16px;border-radius:6px;color:#344154;min-width:160px;animation:toast-in .18s ease-out}.toast svg{width:17px;height:17px;color:var(--success)}@keyframes toast-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.backdrop{position:fixed;inset:0;z-index:999;background:#0f1b2d73;display:flex;align-items:center;justify-content:center;padding:20px}.dialog{width:440px;max-width:calc(100vw - 40px);background:#fff;border-radius:7px;box-shadow:0 16px 45px #0003;padding:24px 26px 20px}.dialog-header{display:flex;gap:12px;align-items:flex-start}.warning-icon{width:32px;height:32px;background:#fff5e6;color:#e5a041;border-radius:50%;display:grid;place-items:center;flex:0 0 auto}.warning-icon svg{width:20px;height:20px}.dialog-title{font-size:16px;line-height:24px;font-weight:600;margin:0 0 10px}.dialog-message{font-size:13px;color:#6c7889;line-height:22px;margin:0}.dialog-actions{margin-top:27px;display:flex;justify-content:flex-end;gap:10px}
+@media(max-width:1030px){.shell{padding:18px}.workspace{grid-template-columns:198px minmax(0,1fr);gap:12px}.grid-head,.scheme-row{gap:9px;grid-template-columns:24px minmax(110px,1fr) minmax(160px,1.5fr) 26px}.scheme-row{padding:12px 9px}.main-body{padding:22px 18px}.main-head,.main-foot{padding-left:18px;padding-right:18px}}
+
+/* Fee table for this product. */
+.state-label{white-space:nowrap;flex-shrink:0}.state-label svg{width:15px;height:15px;flex:0 0 auto}
+.rate-wrap{width:100%;max-width:1120px}.rate-table-top{display:flex;justify-content:flex-end;align-items:center;margin-bottom:12px;min-height:18px}.rate-unit{color:#7e8999;font-size:13px}.rate-scroll{width:100%;overflow-x:auto;border:1px solid #e6eaf0;border-radius:5px}.rate-table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;min-width:max-content}.rate-table th,.rate-table td{border-right:1px solid #e9edf3;border-bottom:1px solid #e9edf3;font-weight:400}.rate-table tr>*:last-child{border-right:none}.rate-table tbody tr:last-child>*{border-bottom:none}.rate-table thead th{height:49px;background:#f8f9fc;color:#495568;font-size:13px;font-weight:600;text-align:left;padding:12px 16px;white-space:nowrap}.rate-table thead th:first-child{width:164px;min-width:164px}.rate-table thead th:not(:first-child){min-width:164px;width:190px;max-width:250px;overflow:hidden;text-overflow:ellipsis}.rate-table tbody th{background:#fff;color:#515e70;font-size:13px;text-align:left;white-space:nowrap;padding:10px 16px;font-weight:400}.rate-table td{padding:8px 12px;background:#fff}.rate-table tbody tr:hover td,.rate-table tbody tr:hover th{background:#fbfcff}.price-input{display:block;width:100%;height:34px;background:#fff;border:1px solid #d9dfe8;border-radius:5px;padding:0 10px;text-align:right;color:#344154;outline:none;font-variant-numeric:tabular-nums;font-size:13px}.price-input::placeholder{color:#bac1cc;text-align:left}.price-input:hover{border-color:#9baede}.price-input:focus{border-color:var(--primary);box-shadow:0 0 0 2px #4c68c21b}.price-input.invalid{border-color:var(--danger)}.rate-filled-count{margin-right:auto;font-size:12px;color:#8993a4;font-variant-numeric:tabular-nums}.status-progress{font-size:12px;color:#7f8da4;font-variant-numeric:tabular-nums;flex-shrink:0}
+
+/* Coverage details: flexible rows and scheme-linked columns. */
+.coverage-wrap{width:100%;max-width:1200px}.coverage-scroll{width:100%;overflow-x:auto;border:1px solid #e6eaf0;border-radius:5px}.coverage-table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;min-width:max-content}.coverage-table th,.coverage-table td{border-right:1px solid #e9edf3;border-bottom:1px solid #e9edf3}.coverage-table tr>*:last-child{border-right:none}.coverage-table tbody tr:last-child>*{border-bottom:none}.coverage-table thead th{padding:12px 12px;height:48px;background:#f8f9fc;color:#495568;font-weight:600;text-align:left;font-size:13px;line-height:20px}.coverage-table thead th.coverage-grip-col{width:42px;min-width:42px}.coverage-table thead th.coverage-scope-col{width:285px;min-width:285px}.coverage-table thead th.coverage-plan-col{width:228px;min-width:228px;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.coverage-table thead th.coverage-action-col{width:52px;min-width:52px}.coverage-table tbody td{padding:12px 10px;vertical-align:top;background:#fff}.coverage-table tbody td.coverage-grip-td{padding:14px 4px;text-align:center}.coverage-table tbody td.coverage-action-td{padding:12px 6px;text-align:center}.coverage-table tbody tr:hover td{background:#fbfcff}.coverage-row.dragging{opacity:.43}.coverage-row.drop-before td{border-top:3px solid var(--primary)}.coverage-row.drop-after td{border-bottom:3px solid var(--primary)}.coverage-input-box{position:relative;min-width:0}.coverage-textarea{display:block;width:100%;height:34px;min-height:34px;max-height:210px;padding:7px 63px 7px 11px;resize:none;border:1px solid #d9dfe8;border-radius:5px;color:#344154;background:#fff;outline:none;overflow-y:hidden;font-size:13px;line-height:19px;overflow-wrap:anywhere}.coverage-textarea::placeholder{color:#b2bac7}.coverage-textarea:hover:not(:disabled){border-color:#9baede}.coverage-textarea:focus{border-color:var(--primary);box-shadow:0 0 0 2px #4c68c21b}.coverage-textarea:disabled{color:#a9b1bd;background:#f6f7fa;cursor:not-allowed}.coverage-textarea.invalid{border-color:#e2595b}.coverage-remaining{position:absolute;right:11px;bottom:8px;color:#adb4c1;font-size:11px;line-height:15px;pointer-events:none;font-variant-numeric:tabular-nums;background:#fff;white-space:nowrap}.coverage-input-box:has(.coverage-textarea:disabled) .coverage-remaining{background:#f6f7fa}.coverage-input-box.scrolling .coverage-remaining{right:22px}.coverage-remaining.full{color:#7d899a}.coverage-note-link{display:inline-flex;gap:4px;align-items:center;border:0;padding:2px 0;margin-top:3px;background:none;color:#8b98a9;font-size:12px}.coverage-note-link:hover:not(:disabled){color:var(--primary)}.coverage-note-link:disabled{color:#bfc6d0;cursor:not-allowed}.coverage-note-link.filled{color:var(--primary)}.coverage-note-link svg{width:14px;height:14px}.coverage-info-icon{display:inline-grid;place-items:center;border-radius:50%;border:1px solid currentColor;width:13px;height:13px;line-height:12px;font-size:10px;font-weight:600}.coverage-add{max-width:none;margin-top:14px}.coverage-error{margin-top:4px;font-size:12px;color:var(--danger)}.coverage-note-dialog{width:min(570px,calc(100vw - 40px))}.coverage-note-input-box{position:relative;margin-top:14px}.coverage-note-area{margin-top:0;display:block;width:100%;min-height:200px;max-height:45vh;padding:10px 12px 29px;border:1px solid #d9dfe8;border-radius:5px;outline:none;resize:vertical;font:inherit;line-height:1.7;color:#344154}.coverage-note-area:focus{border-color:var(--primary);box-shadow:0 0 0 2px #4c68c21b}.coverage-note-count{position:absolute;right:13px;bottom:12px;color:#9aa4b1;background:#fff;pointer-events:none;font-size:12px;line-height:16px;font-variant-numeric:tabular-nums}.coverage-note-dialog .dialog-actions{margin-top:19px}.coverage-stat{font-size:12px;color:#9aa4b1;margin-right:auto}
+
+/* Agreement management */
+.agreement-wrap{width:100%;max-width:1140px}.agreement-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.agreement-filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.agreement-query{height:34px;min-width:220px;width:290px;border:1px solid #d9dfe8;border-radius:5px;background:#fff;padding:0 12px;outline:0}.agreement-query:focus,.agreement-select select:focus{border-color:var(--primary);box-shadow:0 0 0 2px #4c68c21b}.agreement-query::placeholder{color:#abb4c0}.agreement-select{position:relative;display:inline-block}.agreement-select select{appearance:none;-webkit-appearance:none;height:34px;border:1px solid #d9dfe8;border-radius:5px;background:#fff;padding:0 35px 0 12px;min-width:130px;color:#445065;outline:0;cursor:pointer}.agreement-select:after{content:'';position:absolute;right:15px;top:13px;width:7px;height:7px;border-right:1.7px solid #8390a1;border-bottom:1.7px solid #8390a1;transform:rotate(45deg);pointer-events:none}.agreement-add{position:relative;display:inline-block;flex:0 0 auto}.agreement-add .btn{white-space:nowrap;min-width:126px}.agreement-add .btn svg{width:15px;height:15px;flex:0 0 auto}.agreement-add-menu{position:absolute;right:0;top:calc(100% + 5px);z-index:30;width:154px;padding:5px;background:white;border:1px solid #e1e6ed;border-radius:6px;box-shadow:0 8px 26px #21304b20}.agreement-menu-item{border:0;background:transparent;text-align:left;padding:9px 12px;width:100%;border-radius:4px;color:#445066;font-size:13px}.agreement-menu-item:hover{background:#edf2fc;color:var(--primary)}.agreement-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}.agreement-table-wrap{border:1px solid #e7ebf1;border-radius:5px;overflow:visible}.agreement-table thead th{text-align:left;font-weight:500;background:#f8f9fc;color:#5b6577;padding:13px 16px;border-bottom:1px solid #e7ebf1}.agreement-table tbody td{padding:14px 16px;border-bottom:1px solid #edf0f4;vertical-align:middle;word-break:break-word}.agreement-table tbody tr:last-child td{border-bottom:0}.agreement-table tbody tr:hover td{background:#fbfcff}.agreement-table .agreement-name-col{width:33%}.agreement-table .agreement-code-col{width:35%}.agreement-table .agreement-format-col{width:14%}.agreement-table .agreement-action-col{width:18%;white-space:nowrap}.agreement-name{color:var(--primary);background:transparent;border:0;padding:0;max-width:100%;text-align:left;line-height:22px;overflow-wrap:anywhere}.agreement-name:hover{text-decoration:underline}.agreement-action{border:0;background:transparent;padding:3px 7px;color:var(--primary)}.agreement-action:hover{text-decoration:underline}.agreement-action.danger{color:#d75256}.agreement-count{font-size:12px;color:#8993a4}.agreement-empty{min-height:380px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:13px}.agreement-empty h3{font-size:15px;font-weight:500;margin:0}.agreement-empty p{font-size:13px;color:#97a0af;margin:0}.agreement-empty-icon{height:58px;width:58px;border-radius:50%;background:#f4f6fb;color:#aab6ce;display:grid;place-items:center}.agreement-empty-icon svg{width:26px;height:26px}.agreement-pdf-anchor{display:inline-block;position:relative;max-width:100%}.agreement-pdf-pop{display:none;position:absolute;left:0;top:calc(100% - 1px);min-width:260px;max-width:360px;background:#fff;border:1px solid #e2e7ee;box-shadow:0 8px 22px #1c2e4826;border-radius:6px;padding:9px 7px;z-index:30;white-space:normal}.agreement-pdf-anchor:hover .agreement-pdf-pop,.agreement-pdf-anchor:focus-within .agreement-pdf-pop,.agreement-pdf-anchor.open .agreement-pdf-pop{display:block}.agreement-pdf-pop-title{font-size:12px;color:#8b95a4;padding:3px 9px 7px}.agreement-pdf-file{display:flex;align-items:center;gap:7px;width:100%;border:0;border-radius:4px;background:#fff;color:#4b586c;text-align:left;line-height:20px;padding:8px 9px;word-break:break-all}.agreement-pdf-file:hover{color:var(--primary);background:#f3f6fc}.agreement-pdf-file svg{width:15px;height:15px;flex:0 0 auto}.agreement-pdf-filename{min-width:0;overflow-wrap:anywhere}
+.agreement-editor-dialog{width:min(700px,calc(100vw - 48px));max-height:88vh;display:flex;flex-direction:column;padding:0}.agreement-dialog-top{padding:22px 26px 18px;border-bottom:1px solid #eff1f5;display:flex;align-items:center;justify-content:space-between}.agreement-dialog-top h3{font-size:16px;font-weight:600;margin:0}.agreement-close{height:28px;width:28px;border:0;background:transparent;color:#98a1af;font-size:23px;line-height:1;cursor:pointer}.agreement-close:hover{color:#566176}.agreement-dialog-body{padding:23px 28px;overflow-y:auto;min-height:0}.agreement-form-row{display:grid;grid-template-columns:112px minmax(0,1fr);align-items:start;column-gap:16px;margin-bottom:20px}.agreement-form-row:last-child{margin-bottom:0}.agreement-form-label{color:#566173;text-align:right;line-height:34px;white-space:nowrap}.agreement-input-box{position:relative}.agreement-input{width:100%;height:34px;border:1px solid #d9dfe8;border-radius:5px;padding:0 66px 0 12px;outline:0;color:#354255}.agreement-input:focus,.agreement-content-editor:focus{border-color:var(--primary);box-shadow:0 0 0 2px #4c68c21b}.agreement-input::placeholder{color:#b4bdc7}.agreement-input-counter{position:absolute;right:12px;top:8px;font-size:12px;color:#a4adba;pointer-events:none}.agreement-hint{font-size:12px;color:#929baa;margin-top:8px;line-height:19px}.agreement-dialog-bottom{padding:15px 25px;border-top:1px solid #edf0f3;display:flex;justify-content:flex-end;gap:9px}.agreement-upload-button{height:34px;border:1px solid #d8e0ec;border-radius:5px;background:#fff;color:#50627d;padding:0 12px;display:inline-flex;gap:7px;align-items:center}.agreement-upload-button:hover{border-color:var(--primary);color:var(--primary)}.agreement-upload-button svg{width:15px;height:15px}.agreement-files{display:flex;flex-direction:column;gap:8px;margin-top:11px}.agreement-file{border:1px solid #e3e8f0;border-radius:5px;padding:9px 11px;display:flex;gap:10px;align-items:center;justify-content:space-between}.agreement-file-main{display:flex;gap:8px;align-items:center;min-width:0;flex:1}.agreement-file-main svg{width:17px;height:17px;flex:none;color:#8593ad}.agreement-file-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:#4b586a;max-width:360px}.agreement-file-size{font-size:12px;color:#9aa4b3;flex:none}.agreement-file-ops{white-space:nowrap;display:flex;align-items:center;gap:4px}.agreement-file-ops button{background:transparent;border:0;color:var(--primary);font-size:12px;padding:5px}.agreement-file-ops button.danger{color:#d35b60}.agreement-file-ops button:hover{text-decoration:underline}.agreement-toolbar{display:flex;gap:5px;flex-wrap:wrap;background:#f8f9fc;border:1px solid #dfe4eb;border-bottom:0;border-radius:5px 5px 0 0;padding:6px}.agreement-toolbar button{height:28px;min-width:29px;border:1px solid transparent;background:transparent;border-radius:4px;color:#586579;font-weight:500}.agreement-toolbar button:hover{background:#eaf0fc;color:var(--primary)}.agreement-content-editor{border:1px solid #dfe4eb;border-radius:0 0 5px 5px;min-height:215px;max-height:340px;overflow-y:auto;outline:0;padding:12px 14px;line-height:1.7;color:#364356;background:white;overflow-wrap:anywhere}.agreement-content-editor:empty:before{content:attr(data-placeholder);color:#b1bac8;pointer-events:none}.agreement-content-editor p{margin:0 0 9px}.agreement-content-editor ul,.agreement-content-editor ol{padding-left:25px}.agreement-preview-dialog{width:min(860px,calc(100vw - 48px));padding:0;max-height:88vh;display:flex;flex-direction:column}.agreement-preview-body{padding:22px 28px 26px;overflow-y:auto;flex:1;min-height:250px}.agreement-preview-html{line-height:1.8;overflow-wrap:anywhere}.agreement-preview-html p{margin-top:0}.agreement-pdf-frame{width:100%;min-height:60vh;border:1px solid #e6ebf1;border-radius:4px}.agreement-word-preview{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;min-height:260px;text-align:center}.agreement-word-preview svg{width:44px;height:44px;color:#8194b8}.agreement-word-preview-name{font-size:14px;font-weight:500;color:#465166;overflow-wrap:anywhere}.agreement-word-preview-desc{color:#8e98a7;font-size:12px}.agreement-delete-title{color:#2d3645}
+@media(max-width:1060px){.agreement-query{width:210px;min-width:170px}.agreement-tools{align-items:flex-start}.agreement-table thead th,.agreement-table tbody td{padding-left:10px;padding-right:10px}} 
+
+
+/* Agreement format multi-select: selected chips in the control, right-aligned checks in the menu. */
+.agreement-select{width:280px;min-width:220px;vertical-align:middle}
+.agreement-select:after{display:none}
+.agreement-select-trigger{width:100%;min-height:34px;display:flex;align-items:center;gap:5px;padding:4px 30px 4px 8px;border:1px solid #d9dfe8;border-radius:5px;background:#fff;text-align:left;color:#445065;outline:none;cursor:pointer}
+.agreement-select-trigger:hover{border-color:#9cadd8}
+.agreement-select-trigger:focus-visible{border-color:var(--primary);box-shadow:0 0 0 2px #4c68c21b}
+.agreement-select-value{display:flex;align-items:center;flex-wrap:wrap;gap:4px;min-width:0;flex:1;font-size:13px}
+.agreement-select-value.is-placeholder{padding-left:4px;color:#adb5c1}
+.agreement-tag{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;padding:2px 3px 2px 7px;background:#f0f3fa;border:1px solid #e3e9f5;border-radius:3px;color:#4d6388;font-size:12px;line-height:18px}
+.agreement-tag-remove{display:grid;place-items:center;width:17px;height:17px;padding:0;border:0;border-radius:3px;background:transparent;color:#8b98ab;font-size:15px;line-height:1;cursor:pointer}
+.agreement-tag-remove:hover{background:#e1e7f1;color:#43536b}
+.agreement-select-arrow{position:absolute;right:13px;top:50%;margin-top:-4px;width:7px;height:7px;border-right:1.6px solid #8490a1;border-bottom:1.6px solid #8490a1;transform:rotate(45deg);pointer-events:none}
+.agreement-select-pop{position:absolute;z-index:40;top:calc(100% + 5px);left:0;width:100%;min-width:220px;background:#fff;border:1px solid #e1e6ed;border-radius:5px;box-shadow:0 8px 26px #21304b20;padding:5px}
+.agreement-select-item{display:flex;align-items:center;justify-content:space-between;gap:9px;width:100%;height:35px;text-align:left;padding:0 11px;border:0;background:transparent;border-radius:4px;color:#465267;font-size:13px}
+.agreement-select-item:hover{background:#f3f6fc}
+.agreement-select-item-check{width:15px;height:15px;display:grid;place-items:center;flex:none;color:var(--primary)}
+.agreement-select-item-check svg{height:14px;width:14px;stroke-width:2.4}
+.agreement-pdf-file .agreement-pdf-filename{color:var(--primary)}
+.agreement-pdf-file:hover .agreement-pdf-filename{text-decoration:underline}
+/* Claims service rich-text configuration */
+.main-body:has(.claims-wrap){display:flex;flex-direction:column}
+.claims-wrap{max-width:1030px;width:100%;display:flex;flex-direction:column;flex:1}
+.claims-editor{min-height:520px;max-height:none;flex:1;padding:15px 17px;line-height:1.85;font-size:13px;overflow-y:auto}
+.claims-editor:focus{border-color:var(--primary);box-shadow:0 0 0 2px #4c68c21b}
+.claims-toolbar{padding:7px 9px}
+.claims-editor h2,.claims-editor h3{line-height:1.5}
+/* FAQ: compact accordion cards with independently edited items. */
+.faq-wrap{width:100%;max-width:1090px}.faq-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.faq-total{color:#9aa4b1;font-size:12px}.faq-toolbar .btn,.faq-empty .btn{white-space:nowrap;min-width:118px;flex:0 0 auto}.faq-toolbar .btn svg,.faq-empty .btn svg{width:15px;height:15px;flex:0 0 auto}.faq-list{display:flex;flex-direction:column;gap:11px}.faq-card{display:flex;border:1px solid #e5eaf1;background:#fff;border-radius:6px;min-width:0;transition:border-color .12s,box-shadow .12s}.faq-card:hover{border-color:#d5deee}.faq-card.dragging{opacity:.4}.faq-card.drop-before{box-shadow:0 -3px 0 var(--primary)}.faq-card.drop-after{box-shadow:0 3px 0 var(--primary)}.faq-handle{width:38px;flex-shrink:0;display:flex;align-items:flex-start;justify-content:center;padding:18px 0;background:none;border:0;color:#aab4c4;cursor:grab}.faq-handle:active{cursor:grabbing}.faq-handle:hover{color:#63789f}.faq-handle svg{width:16px;height:18px}.faq-content{flex:1;min-width:0}.faq-card-top{display:flex;align-items:center;gap:12px;padding:13px 14px 13px 0;min-height:60px}.faq-question{display:flex;align-items:flex-start;gap:10px;flex:1;min-width:0;color:#364254;border:0;background:transparent;padding:0;text-align:left;line-height:24px}.faq-question-text{min-width:0;overflow-wrap:anywhere;font-size:13px;font-weight:500}.faq-letter{font-size:13px;font-weight:700;color:var(--primary);line-height:24px;flex:none}.faq-chevron{font-size:16px;font-weight:400;color:#99a4b5;flex:none;display:inline-block;transform:rotate(0);transition:transform .15s}.faq-card.open .faq-chevron{transform:rotate(180deg)}.faq-ops{display:flex;align-items:center;gap:4px;flex:none}.faq-ops button{background:none;border:0;border-radius:4px;color:var(--primary);padding:5px 7px;white-space:nowrap;font-size:12px}.faq-ops button:hover{background:#f0f4fc}.faq-ops button.faq-delete{color:#d35b60}.faq-ops button.faq-delete:hover{background:#fff1f0}.faq-answer{display:flex;gap:10px;margin:0 14px 17px 0;padding:14px 16px;background:#f8fafd;border:1px solid #edf1f6;border-radius:5px;font-size:13px;line-height:1.8;color:#5c697d;white-space:pre-wrap;overflow-wrap:anywhere}.faq-answer .faq-letter{color:#8d9aaf;line-height:1.8}.faq-answer-text{flex:1;min-width:0}.faq-empty{min-height:380px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:13px}.faq-empty h3{font-size:15px;font-weight:500;margin:0}.faq-empty-icon{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:#f4f6fb;color:#a9b5c9}.faq-empty-icon svg{width:27px;height:27px}.faq-dialog{width:min(640px,calc(100vw - 40px));max-height:90vh;display:flex;flex-direction:column;padding:0;overflow:hidden}.faq-dialog-body{padding:25px 27px 24px;overflow:auto;min-height:0}.faq-form-row{display:grid;grid-template-columns:75px minmax(0,1fr);gap:15px;margin-bottom:20px;align-items:start}.faq-form-row:last-child{margin:0}.faq-label{text-align:right;line-height:34px;font-size:13px;color:#566173;white-space:nowrap}.faq-input-wrap{position:relative;min-width:0}.faq-input{display:block;width:100%;height:35px;border:1px solid #d9dfe8;border-radius:5px;outline:none;padding:0 66px 0 12px;color:#354255;font-size:13px}.faq-textarea{display:block;width:100%;height:195px;min-height:145px;max-height:48vh;resize:vertical;border:1px solid #d9dfe8;border-radius:5px;padding:10px 13px 29px;outline:none;font:inherit;font-size:13px;line-height:1.7;overflow-wrap:anywhere;color:#354255}.faq-input::placeholder,.faq-textarea::placeholder{color:#aeb8c6}.faq-input:hover,.faq-textarea:hover{border-color:#a4b3d6}.faq-input:focus,.faq-textarea:focus{border-color:var(--primary);box-shadow:0 0 0 2px #4c68c21b}.faq-input-count{position:absolute;right:11px;top:9px;line-height:17px;color:#a3adba;font-size:12px;pointer-events:none;font-variant-numeric:tabular-nums}.faq-answer-count{position:absolute;right:12px;bottom:10px;line-height:17px;color:#a3adba;background:#fff;font-size:12px;pointer-events:none;font-variant-numeric:tabular-nums}.faq-dialog-footer{border-top:1px solid #edf0f3;padding:15px 25px;display:flex;justify-content:flex-end;gap:9px}
+@media(max-width:980px){.faq-card-top{gap:7px}.faq-ops{gap:0}.faq-ops button{padding:5px}}
+
+/* Product display configuration */
+.display-wrap{width:100%;max-width:1060px}.display-group{padding-bottom:27px;margin-bottom:26px;border-bottom:1px solid #edf0f4}.display-group:last-child{border-bottom:0;margin-bottom:0}.display-group-title{font-size:14px;font-weight:600;color:#344052;margin:0 0 19px}.display-row{display:grid;grid-template-columns:126px minmax(0,1fr);gap:17px;align-items:start;margin:0 0 21px}.display-row:last-child{margin-bottom:0}.display-label{color:#596475;text-align:right;line-height:34px;font-size:13px}.display-field{min-width:0}.display-input{width:100%;height:34px;border:1px solid #d9dfe8;border-radius:5px;padding:0 13px;color:#354255;outline:none;background:#fff;font-size:13px}.display-input:focus,.display-numeric:focus,.display-select:focus{border-color:var(--primary);box-shadow:0 0 0 2px #4c68c21b}.display-input::placeholder,.display-numeric::placeholder{color:#abb5c2}.display-input.error,.display-numeric.error{border-color:var(--danger)}.display-short{max-width:620px}.display-counter-field{position:relative}.display-counter-field .display-input{padding-right:75px}.display-field-counter{position:absolute;right:12px;top:8px;line-height:18px;font-size:12px;color:#a6afbd;pointer-events:none}.display-hint{font-size:12px;color:#98a1b0;margin:8px 0 0;line-height:19px}.display-image-area{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}.display-image-blank{width:140px;height:140px;border:1px dashed #cbd5e2;border-radius:6px;background:#fafbfe;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#9ba6b7;gap:6px;cursor:pointer}.display-image-blank:hover{border-color:var(--primary);color:var(--primary)}.display-image-blank svg{width:23px;height:23px}.display-image-preview{width:140px;height:140px;border:1px solid #e1e6ef;border-radius:6px;object-fit:cover;background:#f6f7fb}.display-image-detail{display:flex;flex-direction:column;justify-content:center;min-height:140px;gap:10px}.display-image-actions{display:flex;gap:9px;align-items:center}.display-text-btn{background:transparent;border:0;padding:0;color:var(--primary);cursor:pointer;font-size:13px}.display-text-btn:hover{text-decoration:underline}.display-text-btn.danger{color:#d35259}.display-image-filename{max-width:360px;color:#7e8999;font-size:12px;overflow-wrap:anywhere}.display-file-select{display:none}.display-tag-picker{position:relative;width:100%;max-width:620px}.display-tag-control{display:flex;gap:5px;flex-wrap:wrap;align-items:center;min-height:35px;padding:4px 27px 4px 7px;border:1px solid #d9dfe8;border-radius:5px;cursor:text}.display-tag-control:focus-within{border-color:var(--primary);box-shadow:0 0 0 2px #4c68c21b}.display-tag-chips{display:flex;gap:4px;flex-wrap:wrap}.display-tag-chip{display:inline-flex;gap:4px;align-items:center;padding:2px 4px 2px 8px;border-radius:3px;background:#edf2fb;color:#4c68a0;font-size:12px;line-height:20px;white-space:nowrap}.display-tag-remove{border:0;background:transparent;color:#8999b4;border-radius:3px;padding:0 3px;line-height:16px;font-size:16px;cursor:pointer}.display-tag-remove:hover{color:#38518b;background:#e0e8f7}.display-tag-search{border:0;outline:0;flex:1;min-width:125px;font-size:13px;height:24px;color:#364354;background:transparent}.display-tag-search::placeholder{color:#adb5c2}.display-tag-chevron{position:absolute;right:12px;top:13px;width:7px;height:7px;border-right:1.5px solid #8793a6;border-bottom:1.5px solid #8793a6;transform:rotate(45deg);pointer-events:none}.display-tag-pop{position:absolute;left:0;right:0;top:calc(100% + 5px);max-height:310px;overflow:auto;z-index:45;background:#fff;border:1px solid #dfe5ed;box-shadow:0 7px 25px #1b345022;border-radius:6px;padding:7px 6px}.display-tag-group-label{font-size:12px;color:#9ba4b1;margin:9px 10px 5px}.display-tag-group-label:first-child{margin-top:4px}.display-tag-option{height:33px;display:flex;width:100%;align-items:center;justify-content:space-between;border:0;background:transparent;border-radius:4px;padding:0 10px;text-align:left;font-size:13px;color:#455269}.display-tag-option:hover:not(:disabled){background:#f3f6fc;color:var(--primary)}.display-tag-option:disabled{opacity:.45;cursor:not-allowed}.display-tag-option.selected{color:var(--primary)}.display-tag-option svg{width:15px;height:15px}.display-tag-no-match{font-size:13px;color:#9da7b5;padding:16px;text-align:center}.display-tag-count{font-size:12px;color:#9aa4b1;padding-top:7px}.display-age-pair{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.display-age-cell{display:flex;align-items:center;gap:8px}.display-age-inline-label{color:#778395;font-size:13px;white-space:nowrap}.display-age-control{display:flex;align-items:center;max-width:240px;position:relative}.display-numeric{width:120px;height:34px;border:1px solid #d9dfe8;border-radius:5px 0 0 5px;outline:0;padding:0 11px;color:#364253;background:#fff}.display-numeric:disabled{background:#f6f7fa;color:#a2adbb}.display-select{appearance:none;background:#f7f9fc;border:1px solid #d9dfe8;border-left:0;border-radius:0 5px 5px 0;width:74px;height:34px;padding:0 20px 0 11px;cursor:pointer;font-size:13px;color:#536073;outline:0}.display-age-select-wrap{position:relative}.display-age-select-wrap:after{content:'';position:absolute;right:11px;top:12px;width:6px;height:6px;border-right:1px solid #7c8ca5;border-bottom:1px solid #7c8ca5;transform:rotate(45deg);pointer-events:none}.display-age-unit{height:34px;display:flex;align-items:center;border:1px solid #d9dfe8;border-left:0;background:#f7f9fc;padding:0 13px;border-radius:0 5px 5px 0;color:#67748a}.display-age-dash{color:#a2acba;margin:0 1px}.display-checkbox-label{display:inline-flex;align-items:center;gap:6px;color:#596678;cursor:pointer;white-space:nowrap;font-size:13px}.display-checkbox-label input{appearance:none;width:15px;height:15px;margin:0;border:1px solid #bdc7d5;border-radius:3px;cursor:pointer;background:#fff;display:grid;place-items:center}.display-checkbox-label input:checked{background:var(--primary);border-color:var(--primary)}.display-checkbox-label input:checked:after{content:'✓';font-size:12px;color:#fff;line-height:1}.display-error{font-size:12px;color:#d34d56;margin-top:7px;line-height:18px}.display-radio-group{display:flex;align-items:center;gap:25px;min-height:34px}.display-radio{display:flex;align-items:center;gap:7px;color:#4f5c70;cursor:pointer;font-size:13px}.display-radio input{appearance:none;width:15px;height:15px;border-radius:50%;border:1.5px solid #bfc7d5;display:grid;place-items:center;cursor:pointer;margin:0}.display-radio input:checked{border-color:var(--primary)}.display-radio input:checked:after{content:'';width:7px;height:7px;border-radius:50%;background:var(--primary)}.display-muted-clear{font-size:12px;color:#94a0b2;background:none;border:0;cursor:pointer}.display-muted-clear:hover{color:var(--primary)}.display-core-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}.display-core-top .btn{white-space:nowrap;min-width:116px}.display-core-top .btn svg{width:14px;height:14px;flex:none}.display-core-list{display:flex;flex-direction:column;gap:8px;max-width:730px}.display-core-row{display:flex;align-items:center;gap:10px;border:1px solid #e4e9f1;padding:10px 11px;border-radius:5px;background:#fff}.display-core-row.dragging{opacity:.4}.display-core-row.drop-before{box-shadow:0 -3px 0 var(--primary)}.display-core-row.drop-after{box-shadow:0 3px 0 var(--primary)}.display-core-handle{flex:none;width:24px;height:26px;display:grid;place-items:center;background:none;border:0;color:#aeb9ca;cursor:grab}.display-core-handle svg{width:15px;height:16px}.display-core-text{flex:1;min-width:0;display:flex;justify-content:space-between;gap:18px;align-items:center;font-size:13px}.display-core-value{color:#68768b;text-align:right;white-space:pre-wrap}.display-core-empty{color:#a4adba;font-size:12px}.display-rich-wrap{width:100%;max-width:920px}.display-rich-editor{min-height:310px;max-height:550px}.display-rich-editor img{display:block;max-width:100%;height:auto;margin:12px 0;border-radius:3px}.display-rich-upload{display:none}.display-select-dialog{width:min(620px,calc(100vw - 48px));max-height:85vh;display:flex;flex-direction:column;padding:0}.display-select-body{padding:18px 26px;overflow-y:auto;flex:1;min-height:150px}.display-select-option{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:#fff;border:1px solid #edf0f3;border-radius:5px;padding:11px 12px;margin-bottom:8px;cursor:pointer}.display-select-option:hover{border-color:#c6d3ec;background:#f9fbff}.display-select-option input{appearance:none;width:15px;height:15px;flex:none;border:1px solid #bac5d3;border-radius:3px;background:#fff;display:grid;place-items:center;margin:0;cursor:pointer}.display-select-option input:checked{background:var(--primary);border-color:var(--primary)}.display-select-option input:checked:after{content:"✓";color:#fff;font-size:12px;line-height:1}.display-select-option input:disabled{background:#f0f2f5;cursor:not-allowed}.display-select-option:has(input:disabled){opacity:.57;cursor:not-allowed}.display-select-name{font-size:13px;color:#394557;line-height:21px}.display-select-amount{color:#8793a6;font-size:12px;margin-top:3px;white-space:pre-wrap}.display-select-footer{border-top:1px solid #edf0f3;padding:14px 25px;display:flex;justify-content:space-between;align-items:center;gap:10px}.display-count{font-size:12px;color:#929eb0}.display-head-compact{display:flex;align-items:center;justify-content:space-between;gap:10px}.display-image-lost{color:#d65c62;font-size:12px}.display-rich-tooltip{font-size:12px;color:#909baa}.display-image-upload-button{background:#fff;border:1px solid #d9dfe8;border-radius:5px;padding:7px 12px;color:#586983;cursor:pointer}.display-image-upload-button:hover{border-color:var(--primary);color:var(--primary)}
+@media(max-width:1180px){.display-row{grid-template-columns:108px 1fr;gap:11px}.display-age-pair{gap:10px}.display-age-cell{gap:5px}.display-numeric{width:85px}.display-select{width:68px}}
+
+
+/* 产品展示 · 紧凑、标签统一左对齐的后台内容表单 */
+.display-wrap{max-width:1000px}
+.display-group{padding-bottom:23px;margin-bottom:24px}
+.display-group-title{margin:0 0 18px;font-size:13px;color:#415068;font-weight:600}
+.display-row{grid-template-columns:104px minmax(0,1fr);gap:18px;margin-bottom:20px}
+.display-label{text-align:left;color:#526071;line-height:34px;font-size:13px}
+.display-short{max-width:620px}
+.display-image-blank,.display-image-preview{width:106px;height:106px}
+.display-image-blank{gap:4px}.display-image-blank svg{width:21px;height:21px}
+.display-image-detail{min-height:106px;gap:9px}
+.display-image-preview{object-fit:fill;display:block}
+.display-image-view{padding:0;border:0;border-radius:6px;background:none;cursor:zoom-in;display:block;flex:none}
+.display-image-view:focus-visible{outline:2px solid var(--primary);outline-offset:3px}
+.display-tag-control{padding-right:88px;min-height:35px}
+.display-tag-count{position:absolute;right:33px;top:50%;transform:translateY(-50%);padding:0;margin:0;font-size:12px;line-height:18px;color:#9ca6b6;pointer-events:none}
+.display-tag-chevron{right:12px;top:15px}
+.display-age-range{display:flex;gap:17px;align-items:flex-end;flex-wrap:wrap}
+.display-age-bound{display:flex;flex-direction:column;gap:7px;flex:none}
+.display-age-heading{height:18px;display:flex;align-items:center;gap:17px;color:#7e899a;font-size:12px}
+.display-age-control{max-width:none;display:flex;align-items:center}
+.display-numeric{width:78px;height:34px;text-align:left}
+.display-select{width:76px;padding-left:12px}
+.display-age-unit{height:34px;padding:0 13px}
+.display-age-separator{height:34px;line-height:34px;color:#a2adbd;font-size:13px}
+.display-age-check{color:#788599;font-size:12px;gap:5px}
+.display-age-check input{width:14px;height:14px}
+.display-core-top .btn{min-width:80px;font-weight:400}
+.display-core-top{margin-bottom:10px}
+.display-core-list{max-width:740px}
+.display-rich-wrap{max-width:860px}
+.display-rich-editor{min-height:355px}
+.display-select-dialog .agreement-dialog-top{padding:18px 24px 14px}
+.display-select-dialog .display-select-body{padding:12px 24px 14px;min-height:100px}
+.display-select-dialog .display-select-option{margin-bottom:7px}
+.display-image-modal{width:min(660px,calc(100vw - 48px));max-height:calc(100vh - 48px);padding:0;overflow:hidden}
+.display-preview-bar{padding:14px 19px;border-bottom:1px solid #edf0f4;display:flex;align-items:center;justify-content:space-between;font-weight:600}
+.display-preview-large{display:block;width:min(560px,calc(100vw - 110px));height:min(560px,calc(100vw - 110px));max-height:calc(100vh - 145px);object-fit:fill;margin:20px auto;border-radius:5px}
+.coverage-missing{color:#be7d41}
+@media(max-width:1180px){.display-row{grid-template-columns:92px minmax(0,1fr);gap:13px}.display-age-range{gap:12px}.display-numeric{width:70px}.display-select{width:70px}}
+
+/* 本次局部调整：图片尺寸及操作位置，承保年龄紧凑输入 */
+.display-image-blank,.display-image-preview{width:88px;height:88px}
+.display-image-blank{gap:3px;font-size:12px}
+.display-image-blank svg{width:18px;height:18px}
+.display-image-area{align-items:flex-end;gap:14px}
+.display-image-detail{min-height:88px;justify-content:flex-end;align-items:flex-start;gap:0}
+.display-image-actions{margin:0;padding-bottom:0}
+.display-age-bound{gap:0}
+.display-age-range{align-items:center;gap:13px}
+.display-numeric{width:116px}
+.display-age-separator{height:34px;line-height:34px}
+.display-age-tip{font-size:12px;color:#929daf;line-height:19px;margin-top:8px}
+.display-ungrouped{padding-bottom:10px}
+@media(max-width:1180px){.display-numeric{width:104px}}
+
+/* 核心保障：按已配置方案完整展示保障内容，表格随列数横向滚动 */
+.display-core-list{display:block;max-width:100%;width:100%;gap:0}
+.display-core-scroll{max-width:100%;width:100%;overflow-x:auto;border:1px solid #e4e9f1;border-radius:5px;background:#fff}
+.display-core-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px;color:#435169}
+.display-core-table th,.display-core-table td{padding:11px 12px;border-bottom:1px solid #edf0f4;vertical-align:middle;text-align:left;line-height:1.55;overflow-wrap:anywhere}
+.display-core-table tr:last-child td{border-bottom:0}
+.display-core-table th{background:#f8fafd;color:#69778d;font-weight:500;white-space:normal}
+.display-core-table td.display-core-amount-cell{white-space:pre-wrap;color:#58677e}
+.display-core-table .display-core-scope-col{width:175px;color:#344259}
+.display-core-table th.display-core-drag-col,.display-core-table td.display-core-drag-col{width:40px;text-align:center;padding:6px}
+.display-core-table th.display-core-remove-col,.display-core-table td.display-core-remove-col{width:44px;text-align:center;padding:6px}
+.display-core-row{display:table-row;border:0;padding:0;border-radius:0;background:#fff}
+.display-core-row:hover,.display-picker-row:hover{background:#f9fbff}
+.display-core-row.dragging{opacity:.35}
+.display-core-row.drop-before{box-shadow:inset 0 3px 0 var(--primary)}
+.display-core-row.drop-after{box-shadow:inset 0 -3px 0 var(--primary)}
+.display-core-handle{width:28px;height:28px;display:inline-grid;place-items:center}
+.display-select-dialog{width:min(1020px,calc(100vw - 48px))}
+.display-select-body{padding:12px 24px 16px;overflow:auto;flex:1;min-height:130px}
+.display-picker-table th.display-picker-check-col,.display-picker-table td.display-picker-check-col{width:48px;text-align:center;padding:7px}
+.display-picker-table .display-core-scope-col{width:195px}
+.display-picker-row label{cursor:pointer;color:#394557;display:block}
+.display-picker-check-col input{appearance:none;width:16px;height:16px;border:1px solid #b9c4d4;border-radius:3px;background:#fff;display:inline-grid;place-items:center;cursor:pointer;vertical-align:middle;margin:0}
+.display-picker-check-col input:checked{background:var(--primary);border-color:var(--primary)}
+.display-picker-check-col input:checked:after{content:'✓';color:#fff;font-size:12px;line-height:1}
+.display-picker-row:has(input:checked){background:#f5f8ff}
+.display-picker-check-col input:disabled{border-color:#d5dce6;background:#f3f5f8;cursor:not-allowed}.display-picker-row:has(input:disabled) label{cursor:not-allowed}
+
+/* 核心保障未配置时沿用原有选择弹框，仅呈现空状态 */
+.display-core-empty-dialog{width:min(620px,calc(100vw - 48px))}
+.display-core-empty-panel{min-height:235px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;padding:32px 24px 35px}
+.display-core-empty-illustration{width:48px;height:48px;color:#a8b3c3;margin-bottom:7px}
+.display-core-empty-title{font-size:14px;font-weight:500;color:#364254}
+.display-core-empty-description{font-size:13px;line-height:21px;color:#919cae;margin:0}
+.display-core-empty-footer{justify-content:flex-end}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="page-header"><h1 class="page-title">产品配置管理</h1></header>
+  <div class="workspace">
+    <aside class="side-panel" id="config-nav" aria-label="产品配置导航"></aside>
+    <section class="main-panel" id="config-main" aria-label="配置内容"></section>
+  </div>
+</main>
+<div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+<div id="modal-root"></div>
+<script>
+(function(){
+  'use strict';
+  const CONFIG_GROUPS=[
+    {label:'产品与投保',items:[{id:'plans',label:'产品方案',required:true},{id:'rates',label:'费率表',required:true,depends:true},{id:'coverage',label:'保障计划',required:true,depends:true},{id:'agreement',label:'产品协议',required:true}]},
+    {label:'展示与服务',items:[{id:'display',label:'产品展示',required:true},{id:'claims',label:'理赔服务',required:true},{id:'faq',label:'常见问题',required:false}]}
+  ];
+  const ALL_ITEMS=CONFIG_GROUPS.flatMap(g=>g.items);
+  const KEY='lvhuibao-product-plan-config-demo-v1';
+  const RATE_KEY='lvhuibao-product-rate-config-demo-v1';
+  const COVERAGE_KEY='lvhuibao-product-coverage-config-demo-v1';
+  const CLAIMS_KEY='lvhuibao-product-claims-config-demo-v1';
+  const FAQ_KEY='lvhuibao-product-faq-config-demo-v1';
+  const DISPLAY_KEY='lvhuibao-product-display-config-demo-v1';
+  const TAG_DICTIONARY=[
+    {name:'特殊承保场景',tags:['高风险运动','高原旅游','自驾游','户外运动','研学旅行','团建拓展','邮轮旅游']},
+    {name:'特殊医疗保障',tags:['急性病保障','住院津贴','既往症保障','食物中毒保障','医疗费用垫付']},
+    {name:'救援服务',tags:['紧急救援','医疗运送及送返','野外搜救']},
+    {name:'交通及旅行保障',tags:['公共交通意外','航空意外','交通意外双倍赔付','航班延误','行李延误','旅程取消','旅行变更','签证拒签']},
+    {name:'财产及责任保障',tags:['随身财产损失','个人责任','第三者责任']},
+    {name:'出行保障特征',tags:['全年多次往返','境外长期停留','申根签证']}
+  ];
+  const TERM_LABELS=['1 - 8 天','9 - 12 天','13 - 18 天','19 - 23 天','24 - 30 天','31 - 45 天','46 - 60 天','61 - 90 天'];
+  const icon={
+    check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>',
+    circle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/></svg>',
+    grip:'<svg viewBox="0 0 16 20" fill="currentColor"><circle cx="5" cy="4" r="1.55"/><circle cx="11" cy="4" r="1.55"/><circle cx="5" cy="10" r="1.55"/><circle cx="11" cy="10" r="1.55"/><circle cx="5" cy="16" r="1.55"/><circle cx="11" cy="16" r="1.55"/></svg>',
+    trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2m3 0-1 15H6L5 6m5 4v7m4-7v7"/></svg>',
+    plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5"/></svg>',
+    note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7.9 18.1 3 19l.9-4.9L16.5 3.5Z"/></svg>',
+    warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01M10.3 4.6 2 18a2 2 0 0 0 1.7 3h16.6A2 2 0 0 0 22 18L13.7 4.6a2 2 0 0 0-3.4 0Z"/></svg>'
+  };
+  let nextId=1;
+  const blank=()=>({id:'row-'+nextId++,code:'',name:''});
+  const clone=(items)=>items.map(x=>({...x}));
+  const persisted=(()=>{try{let obj=JSON.parse(localStorage.getItem(KEY)||'null');if(Array.isArray(obj)&&obj.length&&obj.every(x=>typeof x.code==='string'&&typeof x.name==='string'))return obj.map(x=>({id:x.id||blank().id,code:x.code.slice(0,15),name:x.name.slice(0,30)}))}catch(e){}return null})();
+  // Keep IDs unique and monotonically increasing across refreshes, including older demo saves.
+  if(persisted){const seen=new Set();persisted.forEach(p=>{if(seen.has(p.id))p.id=blank().id;seen.add(p.id);const n=Number((p.id||'').replace(/^row-/,''));if(Number.isSafeInteger(n))nextId=Math.max(nextId,n+1)})}
+  const storedRates=(()=>{try{const data=JSON.parse(localStorage.getItem(RATE_KEY)||'null');if(data&&typeof data==='object'&&!Array.isArray(data))return data}catch(e){}return {}})();
+  const cloneRates=data=>Object.fromEntries(Object.entries(data||{}).map(([id,values])=>[id,Array.isArray(values)?Array.from({length:8},(_,i)=>String(values[i]??'')) : Array(8).fill('')]));
+  const savedRates=cloneRates(storedRates);
+  for(const values of Object.values(savedRates))values.forEach((v,i)=>{if(v!=='')values[i]=formatRate(v)||v});
+  let nextCoverageId=1;
+  const blankCoverage=()=>({id:'coverage-'+nextCoverageId++,scope:'',note:'',values:{}});
+  const cloneCoverage=rows=>rows.map(row=>({id:row.id,scope:String(row.scope||''),note:String(row.note||''),values:{...(row.values||{})}}));
+  const persistedCoverage=(()=>{try{const v=JSON.parse(localStorage.getItem(COVERAGE_KEY)||'null');if(Array.isArray(v))return v.filter(x=>x&&typeof x.scope==='string').map(x=>({id:typeof x.id==='string'?x.id:blankCoverage().id,scope:x.scope.slice(0,100),note:String(x.note||'').slice(0,800),values:Object.fromEntries(Object.entries(x.values||{}).map(([k,v])=>[k,String(v).slice(0,200)]))}));}catch(e){}return []})();
+  if(persistedCoverage.length){const used=new Set();persistedCoverage.forEach(r=>{if(used.has(r.id))r.id=blankCoverage().id;used.add(r.id);const n=Number(r.id.replace(/^coverage-/,''));if(Number.isSafeInteger(n))nextCoverageId=Math.max(nextCoverageId,n+1);});}
+
+  const AGREEMENT_KEY='lvhuibao-product-agreements-demo-v1';
+  const AGREEMENT_FORMATS={rich:'富文本',word:'Word',pdf:'PDF'};
+  const AGREEMENT_FORMAT_OPTIONS=[['rich','富文本'],['word','Word'],['pdf','PDF']];
+  const initialClaims=(()=>{try{return String(localStorage.getItem(CLAIMS_KEY)||'')}catch(e){return ''}})();
+  const storedFaqs=(()=>{try{const list=JSON.parse(localStorage.getItem(FAQ_KEY)||'[]');if(Array.isArray(list))return list.filter(x=>x&&typeof x.question==='string'&&typeof x.answer==='string'&&x.question.trim()&&x.answer.trim()).map(x=>({id:String(x.id||''),question:Array.from(x.question).slice(0,50).join(''),answer:Array.from(x.answer).slice(0,800).join('')}))}catch(e){}return []})();
+  let nextFaqId=1;const usedFaqIds=new Set();storedFaqs.forEach(x=>{if(!x.id||usedFaqIds.has(x.id))x.id='faq-'+nextFaqId++;usedFaqIds.add(x.id);const n=Number(x.id.replace(/^faq-/,''));if(Number.isSafeInteger(n))nextFaqId=Math.max(nextFaqId,n+1)});
+  const AGREEMENT_LIMIT=20*1024*1024;
+  let nextAgreementId=1;
+  const agreementStorage=(()=>{try{const rows=JSON.parse(localStorage.getItem(AGREEMENT_KEY)||'[]');return Array.isArray(rows)?rows.filter(v=>v&&['rich','word','pdf'].includes(v.format)).map(v=>({id:String(v.id),format:v.format,name:String(v.name||''),code:String(v.code||''),html:String(v.html||''),files:Array.isArray(v.files)?v.files.filter(f=>f?.id&&f?.name).map(f=>({id:String(f.id),name:String(f.name),size:Number(f.size)||0,type:String(f.type||'')})):[]})):[]}catch(e){return []}})();
+  const agreementBlobCache=new Map();
+  let activePreviewObjectUrl=null;
+  let fileDbPromise=null;
+  function agreementOpenFileDb(){if(fileDbPromise)return fileDbPromise;fileDbPromise=new Promise((resolve,reject)=>{const req=indexedDB.open('lvhuibao-agreement-blobs-v1',1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('blobs'))req.result.createObjectStore('blobs')};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});return fileDbPromise}
+  async function putFileBlob(id,blob){agreementBlobCache.set(id,blob);try{const db=await agreementOpenFileDb();return await new Promise((resolve,reject)=>{const tx=db.transaction('blobs','readwrite');tx.objectStore('blobs').put(blob,id);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}catch(e){return false}}
+  async function getFileBlob(id){if(agreementBlobCache.has(id))return agreementBlobCache.get(id);try{const db=await agreementOpenFileDb();const file=await new Promise((resolve,reject)=>{const tx=db.transaction('blobs','readonly');const r=tx.objectStore('blobs').get(id);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});if(file)agreementBlobCache.set(id,file);return file}catch(e){return null}}
+  async function removeFileBlob(id){agreementBlobCache.delete(id);try{const db=await agreementOpenFileDb();const tx=db.transaction('blobs','readwrite');tx.objectStore('blobs').delete(id)}catch(e){}}
+  function blankDisplay(){return {image:null,intro:'',tags:[],age:{min:'',unit:'day',max:'',unlimited:false},effective:{type:'',note:''},coverageIds:[],rich:''}}
+  function normalizeDisplay(raw){const d=blankDisplay();if(!raw||typeof raw!=='object')return d;
+    if(raw.image?.id&&raw.image?.name)d.image={id:String(raw.image.id),name:String(raw.image.name),size:Number(raw.image.size)||0};
+    d.intro=Array.from(String(raw.intro||'')).slice(0,50).join('');const known=new Set(TAG_DICTIONARY.flatMap(x=>x.tags));
+    d.tags=Array.from(new Set(Array.isArray(raw.tags)?raw.tags.filter(x=>typeof x==='string'&&known.has(x)):[])).slice(0,4);
+    const a=raw.age||{};d.age={min:String(a.min??''),unit:a.unit==='year'?'year':'day',max:a.unlimited?'':String(a.max??''),unlimited:false};
+    const e=raw.effective||{};d.effective={type:['today','later'].includes(e.type)?e.type:'',note:String(e.note||'')};
+    d.coverageIds=Array.from(new Set(Array.isArray(raw.coverageIds)?raw.coverageIds.map(String):[])).slice(0,3);
+    d.rich=String(raw.rich||'');return d}
+  const storedDisplay=(()=>{try{return normalizeDisplay(JSON.parse(localStorage.getItem(DISPLAY_KEY)||'null'))}catch(e){return blankDisplay()}})();
+  const displayPendingBlobs=new Map();let displayPreviewUrl=null;let displayTagsOpen=false,displayTagSearch='';let displayPickIds=[];let displayCoreDrag=null,displayCoreTarget=null,displayCoreAfter=false;let displayRichRange=null;let displayRichUrls=[];
+  const state={displayCommitted:normalizeDisplay(storedDisplay),displayDraft:normalizeDisplay(storedDisplay),faqs:storedFaqs,faqExpanded:new Set(),faqEdit:null,faqDragId:null,faqDragTarget:null,faqDragAfter:false,agreements:agreementStorage,agreementQuery:"",agreementTypes:[],agreementSearch:"",agreementSearchTypes:[],agreementFilterOpen:false,agreementMenu:false,agreementEdit:null,claimsCommitted:initialClaims,claimsDraft:initialClaims,coverageTouched:new Set(),coverageCommitted:cloneCoverage(persistedCoverage),coverageDraft:cloneCoverage(persistedCoverage.length?persistedCoverage:[blankCoverage()]),coverageDragId:null,coverageDragTarget:null,coverageDragAfter:false,ratesTouched:new Set(),active:'plans',committed:clone(persisted||[blank()]),draft:clone(persisted||[]),isConfigured:!!(persisted&&persisted.length&&persisted.every(x=>x.code.trim()&&x.name.trim())),ratesCommitted:cloneRates(savedRates),ratesDraft:cloneRates(savedRates),touched:new Set(),modal:null,dragId:null,dragTarget:null,dragAfter:false};
+  if(!state.draft.length) state.draft=clone(state.committed);
+  const $=selector=>document.querySelector(selector);
+  const escapeHtml=str=>String(str??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const cleanCompare=items=>JSON.stringify(items.map(x=>({code:x.code,name:x.name})));
+  const isDirty=()=>cleanCompare(state.draft)!==cleanCompare(state.committed);
+  const ratesFor=(data,id)=>Array.from({length:TERM_LABELS.length},(_,i)=>data[id]?.[i]??'');
+  const rateSnapshot=(data)=>JSON.stringify(state.committed.map(p=>ratesFor(data,p.id)));
+  const isRatesDirty=()=>rateSnapshot(state.ratesDraft)!==rateSnapshot(state.ratesCommitted);
+  const coverageSnapshot=rows=>JSON.stringify(rows.length===1&&!rows[0].scope&&!rows[0].note&&!Object.values(rows[0].values||{}).some(Boolean)?[]:rows.map(r=>({id:r.id,scope:r.scope,note:r.note,values:Object.fromEntries(Object.entries(r.values||{}).filter(([,v])=>v!==''))})));
+  const isCoverageDirty=()=>coverageSnapshot(state.coverageDraft)!==coverageSnapshot(state.coverageCommitted);
+  const coverageRowHasValue=r=>state.committed.some(p=>String(r.values?.[p.id]||'').trim().length>0);
+  const validCoverage=()=>state.isConfigured&&state.coverageDraft.length>0&&state.coverageDraft.every(r=>r.scope.trim().length>0&&coverageRowHasValue(r)&&Array.from(r.scope).length<=100&&Array.from(r.note).length<=800&&Object.values(r.values).every(v=>Array.from(v).length<=200));
+  const completedCoverage=()=>state.isConfigured&&state.coverageCommitted.length>0&&state.coverageCommitted.every(r=>r.scope.trim()&&coverageRowHasValue(r));
+  const isClaimsDirty=()=>sanitizeAgreementHtml(state.claimsDraft)!==sanitizeAgreementHtml(state.claimsCommitted);
+  const claimsCompleted=()=>agreementRichHasContent(state.claimsCommitted);
+  const activeDirty=()=>state.active==='plans'?isDirty():state.active==='rates'?isRatesDirty():state.active==='coverage'?isCoverageDirty():state.active==='claims'?isClaimsDirty():state.active==='display'?isDisplayDirty():false;
+  const rateIsFilled=v=>/^(?:0|[1-9]\d*)(?:\.\d{1,2})?$/.test(v);
+  // On blur, format amounts to two decimals without floating-point rounding errors.
+  function formatRate(raw){
+    if(!/^\d+(?:\.\d{0,2})?$/.test(raw))return null;
+    const [integer,fraction='']=raw.split('.');
+    return (integer.replace(/^0+(?=\d)/,'')||'0')+'.'+fraction.padEnd(2,'0');
+  }
+  const rateFilledCount=()=>state.committed.reduce((sum,p)=>sum+ratesFor(state.ratesDraft,p.id).filter(rateIsFilled).length,0);
+  const allRatesValid=()=>state.committed.length>0&&state.committed.every(p=>ratesFor(state.ratesDraft,p.id).every(rateIsFilled));
+  const rateCompletedPlan=p=>ratesFor(state.ratesCommitted,p.id).every(rateIsFilled);
+  const finishedRateCount=()=>state.committed.filter(rateCompletedPlan).length;
+  const ensureRateColumn=(id)=>{if(!state.ratesDraft[id])state.ratesDraft[id]=Array(8).fill('')};
+  const hasValidPlans=()=>state.draft.length>0&&state.draft.every(x=>x.code.trim().length>0&&x.name.trim().length>0&&Array.from(x.code).length<=15&&Array.from(x.name).length<=30);
+  const findRow=id=>state.draft.find(x=>x.id===id);
+  function toast(message){const item=document.createElement('div');item.className='toast';item.innerHTML=icon.check+'<span>'+escapeHtml(message)+'</span>';$('#toast-stack').append(item);setTimeout(()=>item.remove(),2500)}
+  function renderNav(){
+    $('#config-nav').innerHTML=CONFIG_GROUPS.map(g=>`<div class="nav-group"><div class="nav-head">${g.label}</div>${g.items.map(item=>{
+      const completed=(item.id==='faq'&&state.faqs.length>0)||(item.id==='plans'&&state.isConfigured)||(item.id==='rates'&&state.isConfigured&&state.committed.length>0&&finishedRateCount()===state.committed.length)||(item.id==='coverage'&&completedCoverage())||(item.id==='agreement'&&state.agreements.length>0)||(item.id==='claims'&&claimsCompleted())||(item.id==='display'&&!!state.displayCommitted.image);
+      const partially=item.id==='rates'&&state.isConfigured&&finishedRateCount()>0&&finishedRateCount()<state.committed.length;
+      const mark=completed?`<span class="status done" title="已完成">${icon.check}</span>`:partially?`<span class="status-progress" title="已完成 ${finishedRateCount()} / ${state.committed.length} 个方案">${finishedRateCount()}/${state.committed.length}</span>`:item.required?`<span class="status pending" title="未完成">${icon.circle}</span>`:'<span class="status"></span>';
+      return `<button type="button" class="nav-btn ${state.active===item.id?'active':''}" data-module="${item.id}" aria-current="${state.active===item.id?'page':'false'}"><span class="nav-label">${item.label}${item.required?'<span class="required-star">*</span>':''}</span>${mark}</button>`
+    }).join('')}</div>`).join('');
+  }
+  function renderRow(row,index){
+    const codeError=state.touched.has(row.id+'-code')&&!row.code.trim();
+    const nameError=state.touched.has(row.id+'-name')&&!row.name.trim();
+    return `<div class="scheme-row" data-row="${row.id}" data-index="${index}">
+      <button type="button" draggable="true" data-drag="${row.id}" aria-label="拖动调整第 ${index+1} 个方案的顺序" title="拖动排序；按 Alt + ↑ / ↓ 也可调整" class="drag-handle">${icon.grip}</button>
+      <div><div class="input-box"><input aria-label="第${index+1}个方案编号（必填）" autocomplete="off" data-field="code" data-id="${row.id}" placeholder="请输入方案编号" maxlength="15" class="${codeError?'invalid':''}" value="${escapeHtml(row.code)}"><span class="counter ${Array.from(row.code).length>=15?'limit':''}">${Array.from(row.code).length}/15</span></div>${codeError?'<div class="field-error">请输入方案编号</div>':''}</div>
+      <div><div class="input-box"><input aria-label="第${index+1}个方案名称（必填）" autocomplete="off" data-field="name" data-id="${row.id}" placeholder="请输入方案名称" maxlength="30" class="${nameError?'invalid':''}" value="${escapeHtml(row.name)}"><span class="counter ${Array.from(row.name).length>=30?'limit':''}">${Array.from(row.name).length}/30</span></div>${nameError?'<div class="field-error">请输入方案名称</div>':''}</div>
+      <button type="button" data-remove="${row.id}" class="remove-btn" title="删除方案" aria-label="删除第${index+1}个方案" ${state.draft.length<=1?'disabled title="至少保留一行方案"':''}>${icon.trash}</button>
+    </div>`;
+  }
+  function renderPlans(){
+    return `<div class="main-head"><h2>产品方案</h2><div id="save-status" class="state-label"></div></div>
+      <div class="main-body"><div class="form-wrap"><div class="grid-head"><div></div><label class="field-label"><span class="required-star">*</span> 方案编号</label><label class="field-label"><span class="required-star">*</span> 方案名称</label><div></div></div>
+        <div class="scheme-list" id="scheme-list">${state.draft.map(renderRow).join('')}</div>
+        <button class="add-btn" type="button" id="add-scheme">${icon.plus}新增方案</button>
+      </div></div>
+      <div class="main-foot"><button type="button" class="btn primary" id="save-schemes">保存</button></div>`;
+  }
+  function renderRates(){
+    if(!state.isConfigured)return renderOther(ALL_ITEMS.find(x=>x.id==='rates'));
+    const planHeads=state.committed.map(p=>`<th scope="col" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</th>`).join('');
+    const body=TERM_LABELS.map((term,i)=>`<tr><th scope="row">${term}</th>${state.committed.map(p=>{
+      ensureRateColumn(p.id);
+      const amount=state.ratesDraft[p.id][i]??'';
+      return `<td><input class="price-input ${state.ratesTouched.has(p.id+'-'+i)&&!rateIsFilled(amount)?'invalid':''}" data-price-plan="${escapeHtml(p.id)}" data-price-term="${i}" aria-label="${escapeHtml(p.name)}，保障期限${term}，金额（元）" inputmode="decimal" autocomplete="off" placeholder="请输入" value="${escapeHtml(amount)}"></td>`;
+    }).join('')}</tr>`).join('');
+    return `<div class="main-head"><h2>费率表</h2><div id="rate-save-status" class="state-label"></div></div>
+      <div class="main-body"><div class="rate-wrap">
+        <div class="rate-table-top"><span class="rate-unit">单位：元</span></div>
+        <div class="rate-scroll"><table class="rate-table"><thead><tr><th scope="col">保障期限</th>${planHeads}</tr></thead><tbody>${body}</tbody></table></div>
+      </div></div>
+      <div class="main-foot"><span class="rate-filled-count" id="rate-filled-count"></span><button type="button" class="btn primary" id="save-rates">保存</button></div>`;
+  }
+  function updateRateField(input){
+    const id=input.dataset.pricePlan,index=Number(input.dataset.priceTerm);if(!state.committed.some(p=>p.id===id)||!Number.isInteger(index)||index<0||index>=8)return;
+    ensureRateColumn(id);
+    let val=input.value.replace(/[^\d.]/g,'');
+    const dot=val.indexOf('.');if(dot>=0)val=val.slice(0,dot+1)+val.slice(dot+1).replace(/\./g,'').slice(0,2);
+    if(val.startsWith('.'))val='0'+val;
+    val=val.slice(0,48);
+    if(input.value!==val)input.value=val;
+    state.ratesDraft[id][index]=val;
+    input.classList.toggle('invalid',state.ratesTouched.has(id+'-'+index)&&!rateIsFilled(val));
+    updateSaveState();
+  }
+  function blurRateField(input){
+    const id=input.dataset.pricePlan,index=Number(input.dataset.priceTerm);
+    if(!state.committed.some(p=>p.id===id)||!Number.isInteger(index)||index<0||index>=8)return;
+    state.ratesTouched.add(id+'-'+index);
+    ensureRateColumn(id);
+    const formatted=formatRate(state.ratesDraft[id][index]);
+    if(formatted!==null){state.ratesDraft[id][index]=formatted;input.value=formatted}
+    input.classList.toggle('invalid',!rateIsFilled(state.ratesDraft[id][index]));
+    updateSaveState();
+  }
+  function saveRates(){
+    if(!isRatesDirty()||!allRatesValid())return;
+    // Save all cells together, including normalized .00 amounts.
+    state.committed.forEach(p=>{state.ratesDraft[p.id]=ratesFor(state.ratesDraft,p.id).map(v=>formatRate(v)||v)});
+    state.ratesTouched.clear();
+    const currentIds=new Set(state.committed.map(p=>p.id));
+    state.ratesCommitted=Object.fromEntries(Object.entries(cloneRates(state.ratesDraft)).filter(([id])=>currentIds.has(id)));
+    state.ratesDraft=cloneRates(state.ratesCommitted);
+    try{localStorage.setItem(RATE_KEY,JSON.stringify(state.ratesCommitted))}catch(e){}
+    renderNav();renderMain();toast('保存成功');
+  }
+
+  function coverageTextAreaValue(raw){return escapeHtml(String(raw??''));}
+  function renderCoverage(){
+    if(!state.isConfigured)return renderOther(ALL_ITEMS.find(x=>x.id==='coverage'));
+    const heads=state.committed.map(p=>`<th class="coverage-plan-col" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</th>`).join('');
+    const body=state.coverageDraft.map((row,index)=>{
+      const invalid=false;
+      const scopeLen=Array.from(row.scope).length;
+      const planCells=state.committed.map(p=>{
+        const value=row.values[p.id]||'';
+        const ready=!!row.scope.trim();
+        return `<td><div class="coverage-input-box"><textarea rows="1" spellcheck="false" class="coverage-textarea" maxlength="200" data-cov-value="${escapeHtml(p.id)}" data-cov-row="${escapeHtml(row.id)}" placeholder="${ready?'请输入':'请先填写保障范围'}" aria-label="${escapeHtml(p.name)}，第${index+1}项保障内容" ${ready?'':'disabled'}>${coverageTextAreaValue(value)}</textarea><span class="coverage-remaining">${Array.from(value).length}/200</span></div></td>`;
+      }).join('');
+      return `<tr class="coverage-row" data-coverage-row="${escapeHtml(row.id)}">
+        <td class="coverage-grip-td"><button type="button" class="drag-handle" draggable="true" data-coverage-drag="${escapeHtml(row.id)}" title="拖动排序；按 Alt + ↑ / ↓ 也可调整" aria-label="拖动调整第${index+1}行保障顺序">${icon.grip}</button></td>
+        <td><div class="coverage-input-box"><textarea rows="1" maxlength="100" spellcheck="false" class="coverage-textarea ${invalid?'invalid':''}" data-cov-scope="${escapeHtml(row.id)}" placeholder="请输入保障范围" aria-label="第${index+1}项保障范围（必填）">${coverageTextAreaValue(row.scope)}</textarea><span class="coverage-remaining">${scopeLen}/100</span></div>
+          <button type="button" data-coverage-note="${escapeHtml(row.id)}" class="coverage-note-link ${row.note.trim()?'filled':''}" ${row.scope.trim()?'':'disabled'}>${icon.note}${row.note.trim()?'编辑说明':'添加说明'}</button>
+        </td>${planCells}<td class="coverage-action-td"><button type="button" class="remove-btn" data-coverage-remove="${escapeHtml(row.id)}" aria-label="删除第${index+1}行保障" title="删除保障范围" ${state.coverageDraft.length<=1?'disabled':''}>${icon.trash}</button></td>
+      </tr>`;
+    }).join('');
+    return `<div class="main-head"><h2>保障计划</h2><div id="coverage-save-status" class="state-label"></div></div>
+      <div class="main-body"><div class="coverage-wrap"><div class="coverage-scroll"><table class="coverage-table">
+        <thead><tr><th class="coverage-grip-col"></th><th class="coverage-scope-col"><span class="required-star">*</span> 保障内容</th>${heads}<th class="coverage-action-col"></th></tr></thead><tbody>${body}</tbody></table></div>
+        <button type="button" id="add-coverage" class="add-btn coverage-add">${icon.plus}新增</button>
+      </div></div><div class="main-foot"><span class="coverage-stat">共 ${state.coverageDraft.length} 项${state.coverageDraft.filter(r=>r.scope.trim()&&!coverageRowHasValue(r)).length?` · <span class="coverage-missing">${state.coverageDraft.filter(r=>r.scope.trim()&&!coverageRowHasValue(r)).length} 项尚未填写方案内容</span>`:''}</span><button type="button" id="save-coverage" class="btn primary">保存</button></div>`;
+  }
+  function growCoverageTextarea(textarea){if(!textarea)return;textarea.style.height='34px';const height=Math.min(Math.max(textarea.scrollHeight,34),210);textarea.style.height=height+'px';textarea.style.overflowY=textarea.scrollHeight>210?'auto':'hidden';textarea.parentElement?.classList.toggle('scrolling',textarea.scrollHeight>210);}
+  function growCoverageAll(){document.querySelectorAll('textarea.coverage-textarea').forEach(growCoverageTextarea)}
+  const findCoverage=id=>state.coverageDraft.find(r=>r.id===id);
+  function addCoverage(){state.coverageDraft.push(blankCoverage());renderMain();const inputs=document.querySelectorAll('[data-cov-scope]');inputs[inputs.length-1]?.focus();}
+  function removeCoverage(id){if(state.coverageDraft.length<=1)return;state.coverageDraft=state.coverageDraft.filter(r=>r.id!==id);state.coverageTouched.delete(id);renderMain();}
+  function updateCoverageField(textarea){
+    const row=findCoverage(textarea.dataset.covScope||textarea.dataset.covRow);if(!row)return;
+    const isScope=textarea.hasAttribute('data-cov-scope'),limit=isScope?100:200;
+    let value=Array.from(textarea.value).slice(0,limit).join('');if(textarea.value!==value)textarea.value=value;
+    if(isScope){row.scope=value;
+      const tr=textarea.closest('tr');tr.querySelectorAll('[data-cov-value]').forEach(el=>{el.disabled=!value.trim();el.placeholder=value.trim()?'请输入':'请先填写保障范围';});
+      const btn=tr.querySelector('[data-coverage-note]');if(btn)btn.disabled=!value.trim();
+    }else{row.values[textarea.dataset.covValue]=value;}
+    const counter=textarea.parentElement.querySelector('.coverage-remaining');if(counter){counter.textContent=Array.from(value).length+'/'+limit;counter.classList.toggle('full',Array.from(value).length>=limit)}
+    growCoverageTextarea(textarea);const stat=$('.coverage-stat');if(stat){const missing=state.coverageDraft.filter(r=>r.scope.trim()&&!coverageRowHasValue(r)).length;stat.innerHTML=`共 ${state.coverageDraft.length} 项${missing?` · <span class="coverage-missing">${missing} 项尚未填写方案内容</span>`:''}`;}updateSaveState();
+  }
+  function openCoverageNote(id){const row=findCoverage(id);if(!row||!row.scope.trim())return;
+    state.modal={type:'note',rowId:id,noteValue:row.note};
+    $('#modal-root').innerHTML=`<div class="backdrop" role="presentation"><div class="dialog coverage-note-dialog" role="dialog" aria-modal="true" aria-labelledby="coverage-note-title"><h3 class="dialog-title" id="coverage-note-title">保障说明</h3><p class="dialog-message">${escapeHtml(row.scope.length>48?row.scope.slice(0,48)+'…':row.scope)}</p><div class="coverage-note-input-box"><textarea id="coverage-note-text" class="coverage-note-area" maxlength="800" placeholder="请输入保障说明"></textarea><span class="coverage-note-count" id="coverage-note-count">0/800</span></div><div class="dialog-actions"><button type="button" class="btn" id="coverage-note-cancel">取消</button><button type="button" class="btn primary" id="coverage-note-apply">确定</button></div></div></div>`;
+    const textarea=$('#coverage-note-text');textarea.value=row.note;$('#coverage-note-count').textContent=Array.from(row.note).length+'/800';textarea.focus();
+  }
+  function applyCoverageNote(){if(state.modal?.type!=='note')return;const row=findCoverage(state.modal.rowId);if(!row)return closeDialog();row.note=Array.from($('#coverage-note-text').value).slice(0,800).join('');closeDialog();renderMain();}
+  function saveCoverage(){if(!isCoverageDirty()||!validCoverage())return;
+    state.coverageCommitted=cloneCoverage(state.coverageDraft);state.coverageTouched.clear();
+    try{localStorage.setItem(COVERAGE_KEY,JSON.stringify(state.coverageCommitted))}catch(e){}
+    const coverageIds=new Set(state.coverageCommitted.map(r=>r.id));
+    const validCoreIds=state.displayCommitted.coverageIds.filter(id=>coverageIds.has(id));
+    if(validCoreIds.length!==state.displayCommitted.coverageIds.length){state.displayCommitted.coverageIds=validCoreIds;state.displayDraft.coverageIds=validCoreIds.slice();try{localStorage.setItem(DISPLAY_KEY,JSON.stringify(state.displayCommitted))}catch(e){}}
+    renderNav();renderMain();toast('保存成功');
+  }
+  function moveCoverage(sourceId,targetId,after){if(!sourceId||!targetId||sourceId===targetId)return;
+    const list=cloneCoverage(state.coverageDraft),from=list.findIndex(r=>r.id===sourceId);if(from<0)return;
+    const [picked]=list.splice(from,1),target=list.findIndex(r=>r.id===targetId);if(target<0)return;
+    list.splice(after?target+1:target,0,picked);if(coverageSnapshot(list)===coverageSnapshot(state.coverageDraft))return;
+    state.coverageDraft=list;renderMain();toast('顺序已调整，保存后生效');
+  }
+  function coverageDragClear(){document.querySelectorAll('.coverage-row').forEach(x=>x.classList.remove('dragging','drop-before','drop-after'));state.coverageDragId=null;state.coverageDragTarget=null;state.coverageDragAfter=false;}
+
+
+  const agreementFileRecord = f => ({id:f.id,name:f.name,size:f.size,type:f.type||''});
+  const agreementMeta=d=>({id:d.id,format:d.format,name:d.name.trim(),code:d.code.trim(),html:d.format==='rich'?sanitizeAgreementHtml(d.html):'',files:d.files.map(agreementFileRecord)});
+  function agreementPersist(){try{localStorage.setItem(AGREEMENT_KEY,JSON.stringify(state.agreements))}catch(e){toast('本地存储空间不足，协议未能持久保存')}}
+  function agreementEditorSnapshot(d){return JSON.stringify({format:d.format,name:d.name,code:d.code,html:d.html,files:d.files.map(f=>[f.id,f.name,f.size])})}
+  function agreementEditorDirty(){const d=state.agreementEdit;return !!d&&agreementEditorSnapshot(d)!==d.original}
+  function sanitizeAgreementHtml(raw){const wrapper=document.createElement('div');wrapper.innerHTML=String(raw||'');const allowed=new Set(['P','BR','B','STRONG','I','EM','U','UL','OL','LI','DIV','H2','H3','H4','BLOCKQUOTE']);const out=document.createElement('div');function clean(src,dest){for(const n of Array.from(src.childNodes)){if(n.nodeType===3){dest.appendChild(document.createTextNode(n.textContent));continue}if(n.nodeType!==1)continue;const tag=n.tagName;if(tag==='SCRIPT'||tag==='STYLE'||tag==='IFRAME'||tag==='SVG')continue;if(allowed.has(tag)){const el=document.createElement(tag.toLowerCase());dest.appendChild(el);clean(n,el)}else clean(n,dest)}}clean(wrapper,out);return out.innerHTML}
+  function agreementRichHasContent(html){const div=document.createElement('div');div.innerHTML=html;return !!div.textContent.trim()}
+  function agreementValid(d){return !!d&&d.name.trim().length>0&&Array.from(d.name).length<=20&&Array.from(d.code).length<=50&&(d.format==='rich'?agreementRichHasContent(d.html):d.files.length>0)}
+  function agreementAddControl(){return `<div class="agreement-add"><button type="button" class="btn primary" id="agreement-add-toggle" aria-expanded="${state.agreementMenu}">${icon.plus} 添加协议 <span style="margin-left:5px;font-size:11px">⌄</span></button>${state.agreementMenu?`<div class="agreement-add-menu" id="agreement-add-menu"><button class="agreement-menu-item" data-agreement-new="rich">富文本</button><button class="agreement-menu-item" data-agreement-new="word">Word 文件</button><button class="agreement-menu-item" data-agreement-new="pdf">PDF 文件</button></div>`:''}</div>`}
+  function agreementFilterControl(){
+    const types=state.agreementTypes;
+    const labels=AGREEMENT_FORMAT_OPTIONS.filter(([id])=>types.includes(id));
+    const selected=labels.length>0;
+    return `<div class="agreement-select ${selected?'has-value':''}" id="agreement-format-select">
+      <div class="agreement-select-trigger" id="agreement-format-trigger" role="combobox" tabindex="0" aria-label="格式筛选" aria-expanded="${state.agreementFilterOpen}" aria-haspopup="listbox" aria-controls="agreement-format-listbox"><span class="agreement-select-value ${selected?'':'is-placeholder'}">${selected?labels.map(([id,label])=>`<span class="agreement-tag">${escapeHtml(label)}<button class="agreement-tag-remove" type="button" data-agreement-tag-remove="${id}" aria-label="移除${escapeHtml(label)}筛选" title="移除${escapeHtml(label)}">×</button></span>`).join(''):'格式'}</span></div>
+      <span class="agreement-select-arrow" aria-hidden="true"></span>
+      ${state.agreementFilterOpen?`<div class="agreement-select-pop" id="agreement-format-listbox" role="listbox" aria-multiselectable="true" aria-label="格式">${AGREEMENT_FORMAT_OPTIONS.map(([id,label])=>`<button type="button" class="agreement-select-item ${types.includes(id)?'selected':''}" data-agreement-format-option="${id}" role="option" aria-selected="${types.includes(id)}"><span>${label}</span><span class="agreement-select-item-check" aria-hidden="true">${types.includes(id)?icon.check:''}</span></button>`).join('')}</div>`:''}
+    </div>`;
+  }
+  function renderAgreements(){const text=state.agreementSearch.trim().toLowerCase();const list=state.agreements.filter(d=>(!text||(d.name+' '+d.code).toLowerCase().includes(text))&&(!state.agreementSearchTypes.length||state.agreementSearchTypes.includes(d.format)));
+    const table=list.length?`<div class="agreement-table-wrap"><table class="agreement-table"><thead><tr><th class="agreement-name-col">协议名称</th><th class="agreement-code-col">协议编码</th><th class="agreement-format-col">格式</th><th class="agreement-action-col">操作</th></tr></thead><tbody>${list.map(d=>`<tr><td>${d.format==='pdf'?`<div class="agreement-pdf-anchor"><button type="button" class="agreement-name" data-agreement-pdf-toggle="${escapeHtml(d.id)}" aria-label="查看${escapeHtml(d.name)}附件列表">${escapeHtml(d.name)}</button><div class="agreement-pdf-pop"><div class="agreement-pdf-pop-title">附件列表（${d.files.length}）</div>${d.files.map(f=>`<button type="button" class="agreement-pdf-file" data-agreement-preview-file="${escapeHtml(f.id)}" data-agreement-doc="${escapeHtml(d.id)}" title="${escapeHtml(f.name)}"><span class="agreement-pdf-filename">${escapeHtml(f.name)}</span></button>`).join('')}</div></div>`:`<button type="button" class="agreement-name" data-agreement-preview="${escapeHtml(d.id)}">${escapeHtml(d.name)}</button>`}</td><td>${escapeHtml(d.code)||'-'}</td><td>${AGREEMENT_FORMATS[d.format]}</td><td><button type="button" class="agreement-action" data-agreement-edit="${escapeHtml(d.id)}">编辑</button><button type="button" class="agreement-action danger" data-agreement-delete="${escapeHtml(d.id)}">删除</button></td></tr>`).join('')}</tbody></table></div>`:`<div class="agreement-empty"><div class="agreement-empty-icon">${icon.layers}</div><h3>${state.agreements.length?'暂无符合条件的协议':'暂无协议'}</h3>${state.agreements.length?'':agreementAddControl()}</div>`;
+    const filters=state.agreements.length?`<div class="agreement-tools"><div class="agreement-filters"><input class="agreement-query" id="agreement-search-input" value="${escapeHtml(state.agreementQuery)}" placeholder="协议名称/协议编码" aria-label="协议名称/协议编码">${agreementFilterControl()}<button class="btn primary" id="agreement-search-btn">搜索</button><button class="btn" id="agreement-reset-btn">重置</button></div>${agreementAddControl()}</div>`:'';
+    return `<div class="main-head"><h2>产品协议</h2></div><div class="main-body"><div class="agreement-wrap">${filters}${table}${state.agreements.length?`<div class="agreement-count" style="margin-top:12px">共 ${list.length} 条协议</div>`:''}</div></div>`;
+  }
+  function openAgreementEditor(format,id){$('#agreement-add-menu')?.remove();const saved=id?state.agreements.find(x=>x.id===id):null;if(id&&!saved)return;
+    const d=saved?{...saved,files:saved.files.map(agreementFileRecord)}:{id:null,format,name:'',code:'',html:'',files:[]};d.original=agreementEditorSnapshot(d);state.agreementEdit=d;state.agreementMenu=false;state.modal={type:'agreement-editor'};renderAgreementEditor();}
+  function agreementFileSize(bytes){return bytes>=1024*1024?(bytes/1024/1024).toFixed(2)+' MB':Math.max(1,Math.round(bytes/1024))+' KB'}
+  function agreementRenderFiles(){const d=state.agreementEdit;if(!d)return;const target=$('#agreement-file-list');if(!target)return;target.innerHTML=d.files.map((f,index)=>`<div class="agreement-file"><div class="agreement-file-main">${icon.note}<span class="agreement-file-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span><span class="agreement-file-size">${agreementFileSize(f.size)}</span></div><div class="agreement-file-ops"><button type="button" data-agreement-attach-preview="${escapeHtml(f.id)}">预览</button><button type="button" data-agreement-replace="${escapeHtml(f.id)}">更换</button><button type="button" class="danger" data-agreement-remove-file="${escapeHtml(f.id)}">删除</button></div></div>`).join('');}
+  function renderAgreementEditor(){const d=state.agreementEdit;if(!d)return;const isRich=d.format==='rich';const isPdf=d.format==='pdf';const upload= !isRich?`<div><label class="agreement-upload-button">${icon.plus} ${d.files.length?(isPdf?'继续上传':'重新上传'):'选择文件'}<input type="file" id="agreement-upload-input" hidden accept="${isPdf?'.pdf,application/pdf':'.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'}" ${isPdf?'multiple':''}></label><div class="agreement-hint">支持 ${isPdf?'PDF（.pdf）':'Word（.doc、.docx）'} 格式，单个文件不超过 20 MB${isPdf?'':'，仅支持 1 个文件'}</div><div id="agreement-file-list" class="agreement-files"></div></div>`:`<div class="agreement-rich-wrap"><div class="agreement-toolbar"><button type="button" data-editor-command="bold" title="加粗"><strong>B</strong></button><button type="button" data-editor-command="italic" title="斜体"><em>I</em></button><button type="button" data-editor-command="underline" title="下划线"><u>U</u></button><button type="button" data-editor-command="insertUnorderedList" title="无序列表">☷</button><button type="button" data-editor-command="insertOrderedList" title="有序列表">1.</button></div><div id="agreement-rich-content" class="agreement-content-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="请输入协议内容"></div></div>`;
+    $('#modal-root').innerHTML=`<div class="backdrop" id="agreement-dialog-backdrop"><div class="dialog agreement-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="agreement-dialog-title"><div class="agreement-dialog-top"><h3 id="agreement-dialog-title">${d.id?'编辑协议':'新增协议'} · ${AGREEMENT_FORMATS[d.format]}</h3><button class="agreement-close" id="agreement-close" type="button" aria-label="关闭">×</button></div><div class="agreement-dialog-body"><div class="agreement-form-row"><label class="agreement-form-label" for="agreement-name-input"><span class="required-star">*</span> 协议名称</label><div class="agreement-input-box"><input type="text" id="agreement-name-input" maxlength="20" class="agreement-input" value="${escapeHtml(d.name)}" placeholder="请输入协议名称"><span class="agreement-input-counter" id="agreement-name-count">${Array.from(d.name).length}/20</span></div></div><div class="agreement-form-row"><label class="agreement-form-label" for="agreement-code-input">协议编码</label><div class="agreement-input-box"><input type="text" id="agreement-code-input" maxlength="50" class="agreement-input" value="${escapeHtml(d.code)}" placeholder="请输入协议编码"><span class="agreement-input-counter" id="agreement-code-count">${Array.from(d.code).length}/50</span></div></div><div class="agreement-form-row"><label class="agreement-form-label"><span class="required-star">*</span> ${isRich?'协议内容':'协议附件'}</label>${upload}</div></div><div class="agreement-dialog-bottom"><button type="button" class="btn" id="agreement-cancel">取消</button><button type="button" class="btn primary" id="agreement-submit">确定</button></div></div></div>`;
+    if(isRich)$('#agreement-rich-content').innerHTML=sanitizeAgreementHtml(d.html);else agreementRenderFiles();updateAgreementEditorSaveState();$('#agreement-name-input').focus();}
+  function updateAgreementEditorSaveState(){const btn=$('#agreement-submit');if(btn)btn.disabled=!agreementValid(state.agreementEdit)}
+  function agreementEditorSync(e){const d=state.agreementEdit;if(!d)return;if(e.target.id==='agreement-name-input'){d.name=Array.from(e.target.value).slice(0,20).join('');$('#agreement-name-count').textContent=Array.from(d.name).length+'/20'}if(e.target.id==='agreement-code-input'){d.code=Array.from(e.target.value).slice(0,50).join('');$('#agreement-code-count').textContent=Array.from(d.code).length+'/50'}if(e.target.id==='agreement-rich-content')d.html=sanitizeAgreementHtml(e.target.innerHTML);updateAgreementEditorSaveState()}
+  function agreementFileInputChanged(files,replaceId){const d=state.agreementEdit;if(!d)return;const incoming=Array.from(files||[]);if(!incoming.length)return;const accepted=[];
+    for(const file of incoming){const name=file.name.toLowerCase();const correct=d.format==='pdf'?name.endsWith('.pdf'):(name.endsWith('.doc')||name.endsWith('.docx'));if(!correct){toast('文件格式不正确');continue}if(file.size>AGREEMENT_LIMIT){toast('单个文件不能超过 20 MB');continue}if(!file.size){toast('不能上传空文件');continue}const id='file-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);accepted.push({id,name:file.name,size:file.size,type:file.type||'',blob:file});}
+    if(!accepted.length)return;if(replaceId){const index=d.files.findIndex(f=>f.id===replaceId);if(index!==-1)d.files.splice(index,1,accepted[0])}else if(d.format==='word'){d.files=[accepted[0]]}else d.files.push(...accepted);agreementRenderFiles();updateAgreementEditorSaveState();}
+  async function agreementSubmit(){const d=state.agreementEdit;if(!agreementValid(d))return;const btn=$('#agreement-submit');if(btn){btn.disabled=true;btn.textContent='保存中…'}
+    try{for(const f of d.files){if(f.blob){await putFileBlob(f.id,f.blob);agreementBlobCache.set(f.id,f.blob)}}}
+    catch(e){if(btn){btn.textContent='确定';btn.disabled=false}toast('附件保存失败，请重试');return}
+    const data=agreementMeta(d);if(!data.id)data.id='agreement-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
+    const original=state.agreements.find(x=>x.id===data.id);if(original){const keep=new Set(data.files.map(x=>x.id));original.files.filter(f=>!keep.has(f.id)).forEach(f=>removeFileBlob(f.id));state.agreements=state.agreements.map(x=>x.id===data.id?data:x)}else state.agreements.push(data);
+    agreementPersist();closeDialog();state.agreementEdit=null;renderNav();renderMain();toast(original?'保存成功':'添加成功');}
+  function agreementRequestClose(){if(agreementEditorDirty()){const panel=document.createElement('div');panel.id='agreement-discard-confirm';panel.className='backdrop';panel.style.zIndex='1002';panel.innerHTML=`<div class="dialog" role="alertdialog" aria-modal="true"><div class="dialog-header"><span class="warning-icon">${icon.warn}</span><div><h3 class="dialog-title">当前修改尚未保存</h3><p class="dialog-message">关闭后将丢失未保存的协议内容，确定放弃修改吗？</p></div></div><div class="dialog-actions"><button type="button" class="btn" id="agreement-keep">继续编辑</button><button type="button" class="btn primary" id="agreement-discard">放弃修改</button></div></div>`;$('#modal-root').append(panel);}else{closeDialog();state.agreementEdit=null}}
+  async function previewAgreementFile(docId,fileId){const doc=state.agreements.find(x=>x.id===docId)||state.agreementEdit;const file=doc?.files.find(f=>f.id===fileId);if(!file)return;let blob=file.blob||await getFileBlob(fileId);if(!blob){toast('附件暂不可用，请重新上传');return}if(activePreviewObjectUrl)URL.revokeObjectURL(activePreviewObjectUrl);activePreviewObjectUrl=URL.createObjectURL(blob);const isPdf=file.name.toLowerCase().endsWith('.pdf');
+    // Opening a preview inside the agreement editor would lose draft form state. Use a separate browser tab for staged files.
+    if(state.modal?.type==='agreement-editor'){window.open(activePreviewObjectUrl,'_blank','noopener');return}
+    state.modal={type:'agreement-preview'};$('#modal-root').innerHTML=`<div class="backdrop" id="agreement-preview-backdrop"><div class="dialog agreement-preview-dialog" role="dialog" aria-modal="true"><div class="agreement-dialog-top"><h3>${escapeHtml(file.name)}</h3><button type="button" class="agreement-close" id="agreement-preview-close" aria-label="关闭">×</button></div><div class="agreement-preview-body">${isPdf?`<iframe class="agreement-pdf-frame" src="${activePreviewObjectUrl}" title="${escapeHtml(file.name)}"></iframe>`:`<div class="agreement-word-preview">${icon.note}<div class="agreement-word-preview-name">${escapeHtml(file.name)}</div><div class="agreement-word-preview-desc">Word 文件请下载后查看完整内容。</div><a class="btn primary" href="${activePreviewObjectUrl}" download="${escapeHtml(file.name)}">下载文件</a></div>`}</div></div></div>`;
+  }
+  function previewAgreement(docId){const doc=state.agreements.find(x=>x.id===docId);if(!doc)return;if(doc.format!=='rich'){if(doc.files[0])return previewAgreementFile(doc.id,doc.files[0].id);return}state.modal={type:'agreement-preview'};$('#modal-root').innerHTML=`<div class="backdrop"><div class="dialog agreement-preview-dialog" role="dialog" aria-modal="true"><div class="agreement-dialog-top"><h3>${escapeHtml(doc.name)}</h3><button type="button" class="agreement-close" id="agreement-preview-close" aria-label="关闭">×</button></div><div class="agreement-preview-body agreement-preview-html">${sanitizeAgreementHtml(doc.html)}</div></div></div>`}
+  function requestAgreementDelete(id){const doc=state.agreements.find(x=>x.id===id);if(!doc)return;state.modal={type:'agreement-delete',id};$('#modal-root').innerHTML=`<div class="backdrop"><div class="dialog" role="alertdialog" aria-modal="true"><div class="dialog-header"><span class="warning-icon">${icon.warn}</span><div><h3 class="dialog-title">删除协议</h3><p class="dialog-message">确定删除「${escapeHtml(doc.name)}」吗？</p></div></div><div class="dialog-actions"><button type="button" class="btn" id="agreement-delete-cancel">取消</button><button type="button" class="btn primary" id="agreement-delete-confirm">确定删除</button></div></div></div>`}
+  function confirmAgreementDelete(){if(state.modal?.type!=='agreement-delete')return;const doc=state.agreements.find(x=>x.id===state.modal.id);if(doc){doc.files.forEach(f=>removeFileBlob(f.id));state.agreements=state.agreements.filter(x=>x.id!==doc.id);agreementPersist()}closeDialog();state.agreementSearch='';state.agreementSearchTypes=[];state.agreementTypes=[];state.agreementFilterOpen=false;renderNav();renderMain();toast('删除成功')}
+
+  function renderClaims(){
+    return `<div class="main-head"><h2>理赔服务</h2><div id="claims-save-status" class="state-label"></div></div>
+      <div class="main-body"><div class="claims-wrap"><div class="agreement-toolbar claims-toolbar">
+        <button type="button" data-claims-command="bold" title="加粗"><strong>B</strong></button>
+        <button type="button" data-claims-command="italic" title="斜体"><em>I</em></button>
+        <button type="button" data-claims-command="underline" title="下划线"><u>U</u></button>
+        <button type="button" data-claims-command="insertUnorderedList" title="无序列表">☷</button>
+        <button type="button" data-claims-command="insertOrderedList" title="有序列表">1.</button>
+      </div><div id="claims-rich-content" class="agreement-content-editor claims-editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="理赔服务" data-placeholder="请输入理赔服务内容">${sanitizeAgreementHtml(state.claimsDraft)}</div></div></div>
+      <div class="main-foot"><button type="button" class="btn primary" id="save-claims">保存</button></div>`;
+  }
+  function saveClaims(){
+    if(!isClaimsDirty()||!agreementRichHasContent(state.claimsDraft))return;
+    state.claimsCommitted=sanitizeAgreementHtml(state.claimsDraft);
+    state.claimsDraft=state.claimsCommitted;
+    try{localStorage.setItem(CLAIMS_KEY,state.claimsCommitted)}catch(e){}
+    renderNav();renderMain();toast('保存成功');
+  }
+  function faqPersist(){try{localStorage.setItem(FAQ_KEY,JSON.stringify(state.faqs))}catch(e){/* In-memory preview remains usable when browser storage is unavailable. */}}
+  function renderFaq(){
+    const list=state.faqs;
+    const items=list.map((d,i)=>`<div class="faq-card ${state.faqExpanded.has(d.id)?'open':''}" data-faq-id="${escapeHtml(d.id)}">
+      <button type="button" class="faq-handle" draggable="true" data-faq-drag="${escapeHtml(d.id)}" aria-label="拖动调整第 ${i+1} 个问题的顺序" title="拖动排序；按 Alt + ↑ / ↓ 也可调整">${icon.grip}</button>
+      <div class="faq-content"><div class="faq-card-top">
+        <button type="button" class="faq-question" data-faq-toggle="${escapeHtml(d.id)}" aria-expanded="${state.faqExpanded.has(d.id)}"><span class="faq-letter">Q</span><span class="faq-question-text">${escapeHtml(d.question)}</span><span class="faq-chevron">⌄</span></button>
+        <div class="faq-ops"><button type="button" data-faq-edit="${escapeHtml(d.id)}">编辑</button><button type="button" class="faq-delete" data-faq-delete="${escapeHtml(d.id)}">删除</button></div></div>
+        ${state.faqExpanded.has(d.id)?`<div class="faq-answer"><span class="faq-letter">A</span><span class="faq-answer-text">${escapeHtml(d.answer)}</span></div>`:''}
+      </div></div>`).join('');
+    const add=`<button type="button" class="btn primary" id="faq-add">${icon.plus} 新增问题</button>`;
+    return `<div class="main-head"><h2>常见问题</h2></div><div class="main-body"><div class="faq-wrap">${list.length?`<div class="faq-toolbar"><span class="faq-total">共 ${list.length} 组问题</span>${add}</div><div class="faq-list" id="faq-list">${items}</div>`:`<div class="faq-empty"><span class="faq-empty-icon">${icon.layers}</span><h3>暂无常见问题</h3>${add}</div>`}</div></div>`;
+  }
+  const faqEditorSnapshot=d=>JSON.stringify([d.question,d.answer]);
+  const faqEditorDirty=()=>!!state.faqEdit&&faqEditorSnapshot(state.faqEdit)!==state.faqEdit.original;
+  const faqIsValid=d=>!!d&&!!d.question.trim()&&!!d.answer.trim()&&Array.from(d.question).length<=50&&Array.from(d.answer).length<=800;
+  function faqOpenEditor(id){
+    const row=id?state.faqs.find(x=>x.id===id):null;if(id&&!row)return;
+    const d={id:row?.id||null,question:row?.question||'',answer:row?.answer||''};d.original=faqEditorSnapshot(d);state.faqEdit=d;state.modal={type:'faq-editor'};
+    $('#modal-root').innerHTML=`<div class="backdrop" id="faq-backdrop"><div class="dialog faq-dialog" role="dialog" aria-modal="true" aria-labelledby="faq-dialog-title">
+      <div class="agreement-dialog-top"><h3 id="faq-dialog-title">${d.id?'编辑问题':'新增问题'}</h3><button type="button" class="agreement-close" id="faq-close" aria-label="关闭">×</button></div>
+      <div class="faq-dialog-body"><div class="faq-form-row"><label class="faq-label" for="faq-question-input"><span class="required-star">*</span> 问题</label><div class="faq-input-wrap"><input id="faq-question-input" class="faq-input" type="text" maxlength="50" placeholder="请输入问题" autocomplete="off" value="${escapeHtml(d.question)}"><span class="faq-input-count" id="faq-question-count">${Array.from(d.question).length}/50</span></div></div>
+      <div class="faq-form-row"><label class="faq-label" for="faq-answer-input"><span class="required-star">*</span> 答案</label><div class="faq-input-wrap"><textarea id="faq-answer-input" class="faq-textarea" maxlength="800" placeholder="请输入答案">${escapeHtml(d.answer)}</textarea><span class="faq-answer-count" id="faq-answer-count">${Array.from(d.answer).length}/800</span></div></div></div>
+      <div class="faq-dialog-footer"><button type="button" class="btn" id="faq-cancel">取消</button><button type="button" class="btn primary" id="faq-submit">确定</button></div></div></div>`;
+    faqUpdateButton();$('#faq-question-input')?.focus();
+  }
+  function faqUpdateButton(){const btn=$('#faq-submit');if(btn)btn.disabled=!faqIsValid(state.faqEdit)||!faqEditorDirty();}
+  function faqEditInput(e){if(!state.faqEdit)return;
+    if(e.target.id==='faq-question-input'){state.faqEdit.question=Array.from(e.target.value).slice(0,50).join('');e.target.value=state.faqEdit.question;$('#faq-question-count').textContent=Array.from(state.faqEdit.question).length+'/50'}
+    else if(e.target.id==='faq-answer-input'){state.faqEdit.answer=Array.from(e.target.value).slice(0,800).join('');e.target.value=state.faqEdit.answer;$('#faq-answer-count').textContent=Array.from(state.faqEdit.answer).length+'/800'}
+    faqUpdateButton();
+  }
+  function faqCloseEditor(){state.faqEdit=null;closeDialog()}
+  function faqRequestClose(){if(!faqEditorDirty())return faqCloseEditor();
+    const panel=document.createElement('div');panel.id='faq-unsaved-confirm';panel.className='backdrop';panel.style.zIndex='1002';panel.innerHTML=`<div class="dialog" role="alertdialog" aria-modal="true"><div class="dialog-header"><span class="warning-icon">${icon.warn}</span><div><h3 class="dialog-title">当前修改尚未保存</h3><p class="dialog-message">关闭后将丢失未保存的内容，确定放弃修改吗？</p></div></div><div class="dialog-actions"><button type="button" class="btn" id="faq-keep">继续编辑</button><button type="button" class="btn primary" id="faq-discard">放弃修改</button></div></div>`;
+    $('#modal-root').append(panel);$('#faq-keep')?.focus();
+  }
+  function faqSubmit(){const d=state.faqEdit;if(!faqIsValid(d)||!faqEditorDirty())return;const wasEditing=!!d.id;
+    if(wasEditing){const row=state.faqs.find(x=>x.id===d.id);if(!row)return;row.question=d.question.trim();row.answer=d.answer.trim();}
+    else{d.id='faq-'+nextFaqId++;state.faqs.push({id:d.id,question:d.question.trim(),answer:d.answer.trim()});state.faqExpanded.add(d.id)}
+    faqPersist();faqCloseEditor();renderNav();renderMain();toast(wasEditing?'保存成功':'添加成功');
+  }
+  function faqToggle(id){if(state.faqExpanded.has(id))state.faqExpanded.delete(id);else state.faqExpanded.add(id);renderMain()}
+  function faqRequestDelete(id){const d=state.faqs.find(x=>x.id===id);if(!d)return;state.modal={type:'faq-delete',id};$('#modal-root').innerHTML=`<div class="backdrop"><div class="dialog" role="alertdialog" aria-modal="true"><div class="dialog-header"><span class="warning-icon">${icon.warn}</span><div><h3 class="dialog-title">删除问题</h3><p class="dialog-message">确定删除「${escapeHtml(d.question)}」吗？</p></div></div><div class="dialog-actions"><button type="button" class="btn" id="faq-delete-cancel">取消</button><button type="button" class="btn primary" id="faq-delete-confirm">确定删除</button></div></div></div>`}
+  function faqDelete(){if(state.modal?.type!=='faq-delete')return;const id=state.modal.id;state.faqs=state.faqs.filter(x=>x.id!==id);state.faqExpanded.delete(id);faqPersist();closeDialog();renderNav();renderMain();toast('删除成功')}
+  function faqMove(from,to,after){if(!from||!to||from===to)return;const list=[...state.faqs];const a=list.findIndex(x=>x.id===from);if(a<0)return;const [item]=list.splice(a,1);const target=list.findIndex(x=>x.id===to);if(target<0)return;list.splice(after?target+1:target,0,item);if(list.every((x,i)=>x.id===state.faqs[i].id))return;state.faqs=list;faqPersist();renderMain();toast('排序已更新')}
+  function faqDragClear(){document.querySelectorAll('.faq-card').forEach(el=>el.classList.remove('dragging','drop-before','drop-after'));state.faqDragId=null;state.faqDragTarget=null;state.faqDragAfter=false}
+  function sanitizeDisplayHtml(raw){
+    const wrap=document.createElement('div');wrap.innerHTML=String(raw||'');const output=document.createElement('div');
+    const allowed=new Set(['P','DIV','BR','B','STRONG','I','EM','U','UL','OL','LI','H2','H3','H4','BLOCKQUOTE']);
+    function walk(src,dst){for(const n of Array.from(src.childNodes)){
+      if(n.nodeType===3){dst.appendChild(document.createTextNode(n.textContent));continue}
+      if(n.nodeType!==1)continue;
+      const tag=n.tagName;
+      if(['SCRIPT','STYLE','IFRAME','SVG','OBJECT','VIDEO','AUDIO','FORM'].includes(tag))continue;
+      if(tag==='IMG'){
+        const id=n.getAttribute('data-display-rich-id')||'';
+        if(/^display-rimg-[\w-]+$/.test(id)){const img=document.createElement('img');img.setAttribute('data-display-rich-id',id);img.setAttribute('alt',(n.getAttribute('alt')||'图文图片').slice(0,80));dst.appendChild(img)}
+        continue;
+      }
+      if(allowed.has(tag)){const el=document.createElement(tag.toLowerCase());dst.appendChild(el);walk(n,el)}else walk(n,dst);
+    }}
+    walk(wrap,output);return output.innerHTML;
+  }
+  function displaySnapshot(d){const n=normalizeDisplay(d);n.rich=sanitizeDisplayHtml(n.rich);return JSON.stringify(n)}
+  function isDisplayDirty(){return displaySnapshot(state.displayDraft)!==displaySnapshot(state.displayCommitted)}
+  function displayAgeErrors(){
+    const a=state.displayDraft.age;const err={min:'',max:''};const hasMin=a.min!=='';const hasMax=a.max!=='';
+    // 年龄整体选填；若填写了最大年龄，最小年龄必须填写；仅填写最小年龄代表无上限。
+    if(!hasMin&&!hasMax)return err;
+    if(!/^\d+$/.test(a.min))err.min='请填写最小年龄';
+    if(hasMax&&!/^\d+$/.test(a.max))err.max='请输入有效的最大年龄';
+    if(!err.min&&!err.max&&hasMax){
+      const min=Number(a.min),max=Number(a.max);
+      const valid=a.unit==='year'?min<=max:min<(max+1)*365.2425;
+      if(!valid)err.max='最大年龄不能小于最小年龄';
+    }
+    return err;
+  }
+  function displayValid(){const d=state.displayDraft,a=displayAgeErrors();return !!d.image&&!a.min&&!a.max&&Array.from(d.intro).length<=50&&d.tags.length<=4&&d.coverageIds.length<=3;}
+  function displayRichHasContent(html){const div=document.createElement('div');div.innerHTML=html;return !!div.textContent.trim()||!!div.querySelector('img[data-display-rich-id]')}
+  function displayCoreSource(){return state.isConfigured?state.coverageCommitted.filter(r=>r.scope?.trim()).map(r=>({id:r.id,scope:r.scope.trim(),values:Object.fromEntries(state.committed.map(p=>[p.id,String(r.values?.[p.id]??'')]))})):[]}
+  function displaySelectedCore(){const src=new Map(displayCoreSource().map(x=>[x.id,x]));return state.displayDraft.coverageIds.map(id=>src.get(id)).filter(Boolean)}
+  function displayTagChips(){return state.displayDraft.tags.map(tag=>`<span class="display-tag-chip">${escapeHtml(tag)}<button type="button" class="display-tag-remove" data-display-tag-remove="${escapeHtml(tag)}" title="移除${escapeHtml(tag)}" aria-label="移除${escapeHtml(tag)}">×</button></span>`).join('')}
+  function displayTagOptions(){const term=displayTagSearch.trim().toLowerCase();const groups=TAG_DICTIONARY.map(g=>({name:g.name,tags:g.tags.filter(t=>t.toLowerCase().includes(term))})).filter(g=>g.tags.length);return groups.length?groups.map(g=>`<div class="display-tag-group-label">${escapeHtml(g.name)}</div>${g.tags.map(t=>{const sel=state.displayDraft.tags.includes(t),disabled=!sel&&state.displayDraft.tags.length>=4;return `<button type="button" class="display-tag-option ${sel?'selected':''}" data-display-tag-opt="${escapeHtml(t)}" ${disabled?'disabled':''}><span>${escapeHtml(t)}</span><span>${sel?icon.check:''}</span></button>`}).join('')}`).join(''):'<div class="display-tag-no-match">暂无匹配标签</div>'}
+  function updateDisplayTags(){const chips=$('#display-tags-chips'),count=$('#display-tag-count'),pop=$('#display-tag-pop'),input=$('#display-tag-search');if(!chips||!pop)return;chips.innerHTML=displayTagChips();if(count)count.textContent=state.displayDraft.tags.length+'/4';if(input)input.placeholder=state.displayDraft.tags.length?'搜索标签':'请选择或搜索标签';pop.hidden=!displayTagsOpen;if(displayTagsOpen)pop.innerHTML=displayTagOptions();}
+  function displayCoreValue(value){return String(value??'').trim()?escapeHtml(String(value)):'<span class="display-core-empty">—</span>'}
+  function displayCoreItems(){
+    const selected=displaySelectedCore();
+    if(!selected.length)return '';
+    const plans=state.committed;
+    return `<div class="display-core-list" id="display-core-list"><div class="display-core-scroll"><table class="display-core-table" style="min-width:${Math.max(480,275+plans.length*125)}px">
+      <thead><tr><th class="display-core-drag-col"></th><th class="display-core-scope-col">保障内容</th>${plans.map(p=>`<th>${escapeHtml(p.name)}</th>`).join('')}<th class="display-core-remove-col"></th></tr></thead>
+      <tbody>${selected.map(r=>`<tr class="display-core-row" data-display-core-row="${escapeHtml(r.id)}">
+        <td class="display-core-drag-col"><button type="button" class="display-core-handle" draggable="true" data-display-core-drag="${escapeHtml(r.id)}" aria-label="拖动调整核心保障顺序" title="拖动调整顺序">${icon.grip}</button></td>
+        <td class="display-core-scope-col">${escapeHtml(r.scope)}</td>
+        ${plans.map(p=>`<td class="display-core-amount-cell">${displayCoreValue(r.values[p.id])}</td>`).join('')}
+        <td class="display-core-remove-col"><button type="button" class="remove-btn" data-display-core-remove="${escapeHtml(r.id)}" title="移除核心保障" aria-label="移除${escapeHtml(r.scope)}">${icon.trash}</button></td>
+      </tr>`).join('')}</tbody>
+    </table></div></div>`;
+  }
+  function renderDisplay(){const d=state.displayDraft,a=d.age;const errs=displayAgeErrors();
+    return `<div class="main-head"><h2>产品展示</h2><div id="display-save-status" class="state-label"></div></div>
+      <div class="main-body"><div class="display-wrap">
+        <section class="display-group"><h3 class="display-group-title">基础展示</h3>
+          <div class="display-row"><label class="display-label"><span class="required-star">*</span> 产品主图</label><div class="display-field"><div class="display-image-area">
+            ${d.image?`<button type="button" id="display-open-image" class="display-image-view" title="点击放大预览主图" aria-label="放大预览主图"><img id="display-main-image" class="display-image-preview" data-image-id="${escapeHtml(d.image.id)}" alt="产品主图预览"></button><div class="display-image-detail"><div class="display-image-actions"><button type="button" id="display-change-image" class="display-text-btn">更换图片</button><button type="button" id="display-remove-image" class="display-text-btn danger">删除</button></div></div>`:`<button type="button" class="display-image-blank" id="display-add-image">${icon.plus}<span>上传主图</span></button>`}
+            <input type="file" id="display-image-input" class="display-file-select" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"></div><div class="display-hint">建议比例 1:1；支持 JPG、PNG、WebP，单张不超过 10 MB</div></div></div>
+          <div class="display-row"><label class="display-label" for="display-intro">产品简介</label><div class="display-field display-short"><div class="display-counter-field"><input type="text" id="display-intro" maxlength="50" class="display-input" value="${escapeHtml(d.intro)}" placeholder="请输入产品简介"><span class="display-field-counter" id="display-intro-count">${Array.from(d.intro).length}/50</span></div></div></div>
+          <div class="display-row"><label class="display-label" for="display-tag-search">产品标签</label><div class="display-field"><div class="display-tag-picker" id="display-tag-picker"><div class="display-tag-control" id="display-tag-control"><div class="display-tag-chips" id="display-tags-chips">${displayTagChips()}</div><input type="text" class="display-tag-search" id="display-tag-search" value="${escapeHtml(displayTagSearch)}" placeholder="${d.tags.length?'搜索标签':'请选择或搜索标签'}" autocomplete="off"></div><span class="display-tag-chevron"></span><div class="display-tag-pop" id="display-tag-pop" ${displayTagsOpen?'':'hidden'}>${displayTagsOpen?displayTagOptions():''}</div><span class="display-tag-count" id="display-tag-count">${d.tags.length}/4</span></div></div></div>
+        </section>
+        <section class="display-group"><h3 class="display-group-title">信息展示</h3>
+          <div class="display-row"><label class="display-label" for="display-age-min">承保年龄</label><div class="display-field">
+            <div class="display-age-range">
+              <div class="display-age-bound"><div class="display-age-control"><input class="display-numeric ${errs.min?'error':''}" id="display-age-min" type="text" inputmode="numeric" autocomplete="off" placeholder="最小年龄" aria-label="最小年龄" value="${escapeHtml(a.min)}"><span class="display-age-select-wrap"><select id="display-age-unit" class="display-select" aria-label="最小年龄单位"><option value="day" ${a.unit==='day'?'selected':''}>天</option><option value="year" ${a.unit==='year'?'selected':''}>周岁</option></select></span></div></div>
+              <span class="display-age-separator">至</span>
+              <div class="display-age-bound"><div class="display-age-control"><input class="display-numeric ${errs.max?'error':''}" id="display-age-max" type="text" inputmode="numeric" autocomplete="off" placeholder="最大年龄" aria-label="最大年龄" value="${escapeHtml(a.max)}"><span class="display-age-unit">周岁</span></div></div>
+            </div><div class="display-age-tip">最大年龄为空，则代表无最大年龄限制</div><div id="display-age-error" class="display-error" ${errs.min||errs.max?'':'hidden'}>${escapeHtml(errs.min||errs.max)}</div>
+          </div></div>
+          <div class="display-row"><label class="display-label">最早起保日</label><div class="display-field"><div class="display-radio-group"><label class="display-radio"><input type="radio" name="display-effective" value="today" ${d.effective.type==='today'?'checked':''}>当日</label><label class="display-radio"><input type="radio" name="display-effective" value="later" ${d.effective.type==='later'?'checked':''}>非当日</label>${d.effective.type?'<button type="button" class="display-muted-clear" id="display-effective-clear">清除</button>':''}</div></div></div>
+          ${d.effective.type?`<div class="display-row"><label class="display-label" for="display-effective-note">起保说明</label><div class="display-field display-short"><input type="text" id="display-effective-note" class="display-input" placeholder="请输入起保说明" value="${escapeHtml(d.effective.note)}"></div></div>`:''}
+          <div class="display-row"><label class="display-label">核心保障</label><div class="display-field">${d.coverageIds.length<3?`<div class="display-core-top"><button type="button" class="btn primary" id="display-select-core">${icon.plus} 去选择</button></div>`:''}<div id="display-core-items">${displayCoreItems()}</div></div></div>
+        </section>
+        <section class="display-ungrouped"><div class="display-row"><label class="display-label">图文详情</label><div class="display-field"><div class="display-rich-wrap"><div class="agreement-toolbar claims-toolbar" id="display-rich-toolbar"><button type="button" data-display-command="bold" title="加粗"><strong>B</strong></button><button type="button" data-display-command="italic" title="斜体"><em>I</em></button><button type="button" data-display-command="underline" title="下划线"><u>U</u></button><button type="button" data-display-command="insertUnorderedList" title="无序列表">☷</button><button type="button" data-display-command="insertOrderedList" title="有序列表">1.</button><button type="button" id="display-rich-image-btn" title="插入图片" aria-label="插入图片">▣</button><input type="file" id="display-rich-image-input" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" class="display-rich-upload"></div><div id="display-rich-content" class="agreement-content-editor display-rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="请输入图文详情">${sanitizeDisplayHtml(d.rich)}</div></div></div></div></section>
+        </div></div><div class="main-foot"><button type="button" class="btn primary" id="display-save">保存</button></div>`;
+  }
+  function updateDisplaySaveState(){const dirty=isDisplayDirty(),valid=displayValid(),status=$('#display-save-status'),btn=$('#display-save');if(status){status.className='state-label '+(dirty?'unsaved':state.displayCommitted.image?'saved':'');status.innerHTML=dirty?'<span class="state-dot"></span>未保存':state.displayCommitted.image?icon.check+'<span>已保存</span>':''}if(btn)btn.disabled=!dirty||!valid;}
+  function displayRefreshAge(){const errs=displayAgeErrors();const min=$('#display-age-min'),max=$('#display-age-max'),out=$('#display-age-error');if(min)min.classList.toggle('error',!!errs.min);if(max)max.classList.toggle('error',!!errs.max);if(out){out.hidden=!errs.min&&!errs.max;out.textContent=errs.min||errs.max}updateDisplaySaveState()}
+  function displayMainInput(e){const d=state.displayDraft,t=e.target;
+    if(t.id==='display-intro'){d.intro=Array.from(t.value).slice(0,50).join('');t.value=d.intro;$('#display-intro-count').textContent=Array.from(d.intro).length+'/50';}
+    if(t.id==='display-age-min'||t.id==='display-age-max'){const val=t.value.replace(/\D/g,'');t.value=val;if(t.id==='display-age-min')d.age.min=val;else d.age.max=val;displayRefreshAge();return}
+    if(t.id==='display-effective-note')d.effective.note=t.value;
+    if(t.id==='display-rich-content')d.rich=sanitizeDisplayHtml(t.innerHTML);
+    updateDisplaySaveState();
+  }
+  async function displayHandleMainImage(file){if(!file)return;
+    if(!/^image\/(?:jpeg|png|webp)$/.test(file.type)||!(/\.(jpe?g|png|webp)$/i.test(file.name))){toast('请选择 JPG、PNG 或 WebP 图片');return}
+    if(!file.size||file.size>10*1024*1024){toast('图片大小不能超过 10 MB');return}
+    const url=URL.createObjectURL(file);const pic=new Image();
+    try{await new Promise((ok,no)=>{pic.onload=ok;pic.onerror=no;pic.src=url})}catch(e){URL.revokeObjectURL(url);toast('图片读取失败');return}URL.revokeObjectURL(url);
+    const id='display-main-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);
+    displayPendingBlobs.set(id,file);state.displayDraft.image={id,name:file.name,size:file.size};renderMain();
+  }
+  async function displayHydratePreview(){const img=$('#display-main-image');if(!img)return;const id=img.dataset.imageId;const blob=displayPendingBlobs.get(id)||await getFileBlob(id);if(!blob){if(img.isConnected&&img.dataset.imageId===id){img.style.display='none';img.insertAdjacentHTML('afterend','<span class="display-image-lost">图片暂不可用，请更换主图</span>')}return}
+    if(!img.isConnected||img.dataset.imageId!==id)return;
+    if(displayPreviewUrl)URL.revokeObjectURL(displayPreviewUrl);displayPreviewUrl=URL.createObjectURL(blob);img.src=displayPreviewUrl;
+  }
+  async function displayOpenImagePreview(){const image=state.displayDraft.image;if(!image)return;const blob=displayPendingBlobs.get(image.id)||await getFileBlob(image.id);if(!blob){toast('图片暂不可用，请更换主图');return}
+    const url=URL.createObjectURL(blob);activePreviewObjectUrl=url;state.modal={type:'display-image-preview'};
+    $('#modal-root').innerHTML=`<div class="backdrop" id="display-image-backdrop"><div class="dialog display-image-modal" role="dialog" aria-modal="true" aria-label="产品主图预览"><div class="display-preview-bar"><span>产品主图</span><button type="button" id="display-preview-close" class="agreement-close" aria-label="关闭">×</button></div><img src="${url}" class="display-preview-large" alt="产品主图放大预览"></div></div>`;
+  }
+  async function displayHydrateRichImages(){const editor=$('#display-rich-content');if(!editor)return;displayRichUrls.forEach(url=>URL.revokeObjectURL(url));displayRichUrls=[];
+    for(const img of Array.from(editor.querySelectorAll('img[data-display-rich-id]'))){const id=img.dataset.displayRichId;const blob=await getFileBlob(id);if(blob&&img.isConnected){const url=URL.createObjectURL(blob);displayRichUrls.push(url);img.src=url;}}
+  }
+  async function saveDisplay(){if(!isDisplayDirty()||!displayValid())return;const data=normalizeDisplay(state.displayDraft);data.rich=sanitizeDisplayHtml(data.rich);data.coverageIds=data.coverageIds.filter(id=>displayCoreSource().some(r=>r.id===id));const old=state.displayCommitted.image?.id;
+    if(data.image&&displayPendingBlobs.has(data.image.id)){await putFileBlob(data.image.id,displayPendingBlobs.get(data.image.id));displayPendingBlobs.delete(data.image.id)}
+    state.displayCommitted=normalizeDisplay(data);state.displayDraft=normalizeDisplay(data);
+    try{localStorage.setItem(DISPLAY_KEY,JSON.stringify(data))}catch(e){toast('本地存储空间不足，无法持久保存配置')}
+    if(old&&old!==data.image?.id)removeFileBlob(old);
+    renderNav();renderMain();toast('保存成功');
+  }
+  function displayOpenCorePicker(){
+    const rows=displayCoreSource();
+    state.modal={type:rows.length?'display-core':'display-core-empty'};
+    displayPickIds=state.displayDraft.coverageIds.filter(id=>rows.some(r=>r.id===id));
+    if(!rows.length){$('#modal-root').innerHTML=`<div class="backdrop" id="display-core-backdrop"><div class="dialog display-select-dialog display-core-empty-dialog" role="dialog" aria-modal="true" aria-labelledby="display-core-title">
+      <div class="agreement-dialog-top"><h3 id="display-core-title">选择核心保障</h3><button type="button" class="agreement-close" id="display-core-close" aria-label="关闭">×</button></div>
+      <div class="display-core-empty-panel">
+        <svg class="display-core-empty-illustration" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 6h16l9 9v11"/><path d="M27 6v9h9"/><path d="M11 6v35h18"/><circle cx="31" cy="32" r="7"/><path d="m36 37 6 6"/></svg>
+        <div class="display-core-empty-title">暂无可选保障内容</div>
+        <p class="display-core-empty-description">请先配置保障计划，再选择核心保障</p>
+      </div>
+      <div class="display-select-footer display-core-empty-footer"><button type="button" class="btn" id="display-core-close-bottom">关闭</button></div>
+    </div></div>`;return;}
+    const plans=state.committed;
+    $('#modal-root').innerHTML=`<div class="backdrop" id="display-core-backdrop"><div class="dialog display-select-dialog" role="dialog" aria-modal="true"><div class="agreement-dialog-top"><h3>选择核心保障</h3><button class="agreement-close" id="display-core-close" aria-label="关闭">×</button></div>
+      <div class="display-select-body"><div class="display-core-scroll"><table class="display-core-table display-picker-table" style="min-width:${Math.max(480,275+plans.length*125)}px">
+        <thead><tr><th class="display-picker-check-col"></th><th class="display-core-scope-col">保障内容</th>${plans.map(p=>`<th>${escapeHtml(p.name)}</th>`).join('')}</tr></thead>
+        <tbody>${rows.map(r=>`<tr class="display-picker-row"><td class="display-picker-check-col"><input type="checkbox" id="display-pick-${escapeHtml(r.id)}" data-display-pick="${escapeHtml(r.id)}" ${displayPickIds.includes(r.id)?'checked':displayPickIds.length>=3?'disabled':''}></td><td class="display-core-scope-col"><label for="display-pick-${escapeHtml(r.id)}">${escapeHtml(r.scope)}</label></td>${plans.map(p=>`<td class="display-core-amount-cell">${displayCoreValue(r.values[p.id])}</td>`).join('')}</tr>`).join('')}</tbody>
+      </table></div></div>
+      <div class="display-select-footer"><span class="display-count" id="display-pick-count">已选择 ${displayPickIds.length}/3 项</span><div class="display-image-actions"><button class="btn" id="display-core-cancel">取消</button><button class="btn primary" id="display-core-confirm">确定</button></div></div></div></div>`;
+  }
+  function displayPickerToggle(el){const id=el.dataset.displayPick;if(!id)return;if(el.checked){if(displayPickIds.length>=3){el.checked=false;return}displayPickIds.push(id)}else displayPickIds=displayPickIds.filter(x=>x!==id);document.querySelectorAll('#display-core-backdrop [data-display-pick]').forEach(box=>{box.disabled=displayPickIds.length>=3&&!displayPickIds.includes(box.dataset.displayPick)});const label=$('#display-pick-count');if(label)label.textContent='已选择 '+displayPickIds.length+'/3 项'}
+  function displayConfirmCore(){state.displayDraft.coverageIds=displayPickIds.slice(0,3);closeDialog();renderMain()}
+  function displayCoreRemove(id){state.displayDraft.coverageIds=state.displayDraft.coverageIds.filter(x=>x!==id);renderMain()}
+  function displayMoveCore(from,to,after){if(!from||!to||from===to)return;const list=[...state.displayDraft.coverageIds];const i=list.indexOf(from),j=list.indexOf(to);if(i<0||j<0)return;const [m]=list.splice(i,1);const target=list.indexOf(to);list.splice(after?target+1:target,0,m);state.displayDraft.coverageIds=list;renderMain()}
+  function displayCoreDragClear(){document.querySelectorAll('.display-core-row').forEach(x=>x.classList.remove('dragging','drop-before','drop-after'));displayCoreDrag=null;displayCoreTarget=null;displayCoreAfter=false}
+  function displaySelectTag(tag){const list=state.displayDraft.tags;if(list.includes(tag))state.displayDraft.tags=list.filter(x=>x!==tag);else if(list.length<4)state.displayDraft.tags.push(tag);else {toast('最多选择 4 个标签');return}updateDisplayTags();updateDisplaySaveState();}
+  function displayRememberSelection(){const selection=window.getSelection(),editor=$('#display-rich-content');if(selection?.rangeCount&&editor&&editor.contains(selection.anchorNode))displayRichRange=selection.getRangeAt(0).cloneRange()}
+  async function displayInsertRichImage(file){if(!file)return;
+    if(!/^image\/(jpeg|png|webp)$/.test(file.type)||!file.size||file.size>5*1024*1024){toast('请选择不超过 5 MB 的 JPG、PNG 或 WebP 图片');return}
+    const id='display-rimg-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);await putFileBlob(id,file);
+    const editor=$('#display-rich-content');if(!editor)return;editor.focus();let range=displayRichRange;
+    if(!range||!editor.contains(range.commonAncestorContainer)){range=document.createRange();range.selectNodeContents(editor);range.collapse(false)}
+    const img=document.createElement('img');img.setAttribute('data-display-rich-id',id);img.setAttribute('alt',file.name.slice(0,80));
+    range.deleteContents();range.insertNode(img);range.setStartAfter(img);range.collapse(true);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);
+    state.displayDraft.rich=sanitizeDisplayHtml(editor.innerHTML);displayRichRange=null;displayHydrateRichImages();updateDisplaySaveState();
+  }
+
+  function renderOther(item){
+    const blocked=item.depends&&!state.isConfigured;
+    const body=blocked?`<div class="dependent-empty"><span class="empty-graphic">${icon.layers}</span><p class="empty-title">请先配置产品方案</p><p class="empty-desc">配置产品方案后，才能设置${item.label}。</p><button type="button" class="btn primary" id="go-plans">去配置产品方案</button></div>`:`<div class="quiet-placeholder"></div>`;
+    return `<div class="main-head"><h2>${escapeHtml(item.label)}</h2></div><div class="main-body placeholder">${body}</div>`;
+  }
+  function renderMain(){const item=ALL_ITEMS.find(x=>x.id===state.active);$('#config-main').innerHTML=state.active==='plans'?renderPlans():state.active==='rates'?renderRates():state.active==='coverage'?renderCoverage():state.active==='agreement'?renderAgreements():state.active==='claims'?renderClaims():state.active==='faq'?renderFaq():state.active==='display'?renderDisplay():renderOther(item);updateSaveState();if(state.active==='coverage')growCoverageAll();if(state.active==='display'){displayHydratePreview();displayHydrateRichImages();}}
+  function renderAll(){renderNav();renderMain()}
+  function updateSaveState(){
+    if(state.active==='display'){updateDisplaySaveState();return;}
+    if(state.active==='claims'){
+      const dirty=isClaimsDirty(),status=$('#claims-save-status');if(!status)return;
+      status.className='state-label '+(dirty?'unsaved':claimsCompleted()?'saved':'');
+      status.innerHTML=dirty?'<span class="state-dot"></span>未保存':claimsCompleted()?icon.check+'<span>已保存</span>':'';
+      const btn=$('#save-claims');if(btn)btn.disabled=!dirty||!agreementRichHasContent(state.claimsDraft);
+      return;
+    }
+    if(state.active==='rates'&&state.isConfigured){
+      const dirty=isRatesDirty(),status=$('#rate-save-status');
+      if(!status)return;
+      status.className='state-label '+(dirty?'unsaved':finishedRateCount()?'saved':'');
+      status.innerHTML=dirty?'<span class="state-dot"></span>未保存':finishedRateCount()===state.committed.length?icon.check+'<span>已保存</span>':'';
+      const counter=$('#rate-filled-count');if(counter)counter.textContent='已填写 '+rateFilledCount()+' / '+(state.committed.length*TERM_LABELS.length)+' 项';
+      const btn=$('#save-rates');if(btn)btn.disabled=!dirty||!allRatesValid();
+      return;
+    }
+    if(state.active==='coverage'&&state.isConfigured){
+      const dirty=isCoverageDirty(),status=$('#coverage-save-status');if(!status)return;
+      status.className='state-label '+(dirty?'unsaved':completedCoverage()?'saved':'');
+      status.innerHTML=dirty?'<span class="state-dot"></span>未保存':completedCoverage()?icon.check+'<span>已保存</span>':'';
+      const btn=$('#save-coverage');if(btn)btn.disabled=!dirty||!validCoverage();
+      return;
+    }
+    if(state.active!=='plans')return;
+    const dirty=isDirty();
+    const status=$('#save-status');
+    status.className='state-label '+(dirty?'unsaved':state.isConfigured?'saved':'');
+    status.innerHTML=dirty?'<span class="state-dot"></span>未保存':state.isConfigured?icon.check+'<span>已保存</span>':'';
+    const btn=$('#save-schemes');if(btn)btn.disabled=!dirty||!hasValidPlans();
+  }
+  function addRow(){state.draft.push(blank());renderMain();const inputs=$('#scheme-list').querySelectorAll('input[data-field="name"]');if(inputs.length)inputs[inputs.length-1].focus();}
+  function deleteRow(id){if(state.draft.length<=1)return;state.draft=state.draft.filter(x=>x.id!==id);state.touched.delete(id+'-code');state.touched.delete(id+'-name');renderMain()}
+  function updateField(input){const row=findRow(input.dataset.id);if(!row)return;const field=input.dataset.field;const limit=field==='code'?15:30;
+    let val=Array.from(input.value).slice(0,limit).join('');if(input.value!==val)input.value=val;
+    row[field]=val;
+    const count=input.closest('.input-box').querySelector('.counter');count.textContent=Array.from(val).length+'/'+limit;count.classList.toggle('limit',Array.from(val).length>=limit);
+    if(val.trim()) { input.classList.remove('invalid');let err=input.closest('.input-box').nextElementSibling;if(err&&err.classList.contains('field-error'))err.remove(); }
+    updateSaveState();
+  }
+  function markTouched(input){const field=input.dataset.field;state.touched.add(input.dataset.id+'-'+field);if(!input.value.trim()){input.classList.add('invalid');if(!input.closest('.input-box').nextElementSibling?.classList.contains('field-error')){let e=document.createElement('div');e.className='field-error';e.textContent=field==='code'?'请输入方案编号':'请输入方案名称';input.closest('.input-box').after(e)}}}
+  function savePlans(){if(!isDirty()||!hasValidPlans())return;
+    state.committed=clone(state.draft);
+    state.isConfigured=true;
+    state.touched.clear();
+    try{localStorage.setItem(KEY,JSON.stringify(state.committed.map(x=>({id:x.id,code:x.code,name:x.name}))))}catch(e){}
+    // A renamed or moved plan retains its rates through its immutable row ID.
+    const validIds=new Set(state.committed.map(p=>p.id));
+    state.ratesCommitted=Object.fromEntries(Object.entries(state.ratesCommitted).filter(([id])=>validIds.has(id)));
+    state.ratesDraft=cloneRates(state.ratesCommitted);
+    try{localStorage.setItem(RATE_KEY,JSON.stringify(state.ratesCommitted))}catch(e){}
+    state.coverageCommitted.forEach(r=>{r.values=Object.fromEntries(Object.entries(r.values).filter(([id])=>validIds.has(id)))});
+    state.coverageDraft=cloneCoverage(state.coverageCommitted.length?state.coverageCommitted:[blankCoverage()]);
+    try{localStorage.setItem(COVERAGE_KEY,JSON.stringify(state.coverageCommitted))}catch(e){}
+    renderNav();renderMain();toast('保存成功');
+  }
+  function moveRow(sourceId,targetId,after){if(!sourceId||!targetId||sourceId===targetId)return;
+    const list=clone(state.draft);const pos=list.findIndex(x=>x.id===sourceId);if(pos<0)return;const [picked]=list.splice(pos,1);let target=list.findIndex(x=>x.id===targetId);if(target<0)return;list.splice(after?target+1:target,0,picked);
+    if(cleanCompare(list)===cleanCompare(state.draft))return;
+    state.draft=list;renderMain();toast('顺序已调整，保存后生效');
+  }
+  function switchModule(id){if(!ALL_ITEMS.some(x=>x.id===id)||state.active===id)return;
+    if(activeDirty()){showLeaveDialog(id);return}
+    displayTagsOpen=false;displayTagSearch='';state.active=id;renderAll();
+  }
+  function showLeaveDialog(id){state.modal={nextId:id};$('#modal-root').innerHTML=`<div class="backdrop" role="presentation"><div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="leave-title" aria-describedby="leave-desc"><div class="dialog-header"><span class="warning-icon">${icon.warn}</span><div><h3 class="dialog-title" id="leave-title">当前修改尚未保存</h3><p class="dialog-message" id="leave-desc">切换配置项后，未保存的修改将丢失。是否放弃修改？</p></div></div><div class="dialog-actions"><button type="button" class="btn" id="keep-editing">继续编辑</button><button type="button" class="btn primary" id="discard-editing">放弃修改</button></div></div></div>`;$('#keep-editing').focus()}
+  function closeDialog(){$('#modal-root').innerHTML='';state.modal=null;if(activePreviewObjectUrl){setTimeout(()=>URL.revokeObjectURL(activePreviewObjectUrl),2000);activePreviewObjectUrl=null}}
+  function discardAndSwitch(){if(!state.modal)return;const id=state.modal.nextId;state.draft=clone(state.committed);state.ratesDraft=cloneRates(state.ratesCommitted);state.coverageDraft=cloneCoverage(state.coverageCommitted.length?state.coverageCommitted:[blankCoverage()]);state.claimsDraft=state.claimsCommitted;state.displayDraft=normalizeDisplay(state.displayCommitted);displayTagsOpen=false;displayTagSearch='';state.coverageTouched.clear();state.ratesTouched.clear();state.touched.clear();closeDialog();state.active=id;renderAll()}
+  function dragClear(){document.querySelectorAll('.scheme-row').forEach(x=>x.classList.remove('dragging','drop-before','drop-after'));state.dragId=null;state.dragTarget=null;state.dragAfter=false}
+  $('#config-nav').addEventListener('click',e=>{const el=e.target.closest('[data-module]');if(el)switchModule(el.dataset.module)});
+  $('#config-main').addEventListener('click',e=>{
+    if(state.active==='display'){
+      const tagRemove=e.target.closest('[data-display-tag-remove]');if(tagRemove){e.stopPropagation();displaySelectTag(tagRemove.dataset.displayTagRemove);return}
+      const opt=e.target.closest('[data-display-tag-opt]');if(opt){e.stopPropagation();displaySelectTag(opt.dataset.displayTagOpt);$('#display-tag-search')?.focus();return}
+      if(e.target.closest('#display-tag-control')&&!e.target.closest('#display-tag-search')){$('#display-tag-search')?.focus();return}
+      if(e.target.closest('#display-add-image')||e.target.closest('#display-change-image')){$('#display-image-input')?.click();return}
+      if(e.target.closest('#display-remove-image')){state.displayDraft.image=null;renderMain();return}
+      if(e.target.closest('#display-open-image')){displayOpenImagePreview();return}
+      if(e.target.closest('#display-effective-clear')){state.displayDraft.effective={type:'',note:''};renderMain();return}
+      if(e.target.closest('#display-select-core')){displayOpenCorePicker();return}
+      const coreRemove=e.target.closest('[data-display-core-remove]');if(coreRemove){displayCoreRemove(coreRemove.dataset.displayCoreRemove);return}
+      if(e.target.closest('#display-save')){saveDisplay();return}
+      if(e.target.closest('#display-rich-image-btn')){displayRememberSelection();$('#display-rich-image-input')?.click();return}
+      const cmd=e.target.closest('[data-display-command]');if(cmd){const editor=$('#display-rich-content');editor?.focus();document.execCommand('styleWithCSS',false,'false');document.execCommand(cmd.dataset.displayCommand,false,null);if(editor){state.displayDraft.rich=sanitizeDisplayHtml(editor.innerHTML);updateDisplaySaveState()}return}
+    }
+    if(e.target.closest('#faq-add'))return faqOpenEditor(null);
+    const faqToggleBtn=e.target.closest('[data-faq-toggle]');if(faqToggleBtn)return faqToggle(faqToggleBtn.dataset.faqToggle);
+    const faqEditBtn=e.target.closest('[data-faq-edit]');if(faqEditBtn)return faqOpenEditor(faqEditBtn.dataset.faqEdit);
+    const faqDeleteBtn=e.target.closest('[data-faq-delete]');if(faqDeleteBtn)return faqRequestDelete(faqDeleteBtn.dataset.faqDelete);
+    const pdfFile=e.target.closest('[data-agreement-preview-file]');if(pdfFile){return previewAgreementFile(pdfFile.dataset.agreementDoc,pdfFile.dataset.agreementPreviewFile)}
+    const pdfToggle=e.target.closest('[data-agreement-pdf-toggle]');if(pdfToggle){pdfToggle.closest('.agreement-pdf-anchor').classList.toggle('open');return}
+    const docPreview=e.target.closest('[data-agreement-preview]');if(docPreview)return previewAgreement(docPreview.dataset.agreementPreview);
+    const editAgreement=e.target.closest('[data-agreement-edit]');if(editAgreement)return openAgreementEditor(null,editAgreement.dataset.agreementEdit);
+    const deleteAgreement=e.target.closest('[data-agreement-delete]');if(deleteAgreement)return requestAgreementDelete(deleteAgreement.dataset.agreementDelete);
+    const newAgreement=e.target.closest('[data-agreement-new]');if(newAgreement)return openAgreementEditor(newAgreement.dataset.agreementNew);
+    if(e.target.closest('#agreement-add-toggle')){state.agreementMenu=!state.agreementMenu;renderMain();return}
+    const tagRemove=e.target.closest('[data-agreement-tag-remove]');if(tagRemove){state.agreementTypes=state.agreementTypes.filter(id=>id!==tagRemove.dataset.agreementTagRemove);renderMain();return}
+    const opt=e.target.closest('[data-agreement-format-option]');if(opt){const id=opt.dataset.agreementFormatOption;state.agreementTypes=state.agreementTypes.includes(id)?state.agreementTypes.filter(x=>x!==id):AGREEMENT_FORMAT_OPTIONS.map(x=>x[0]).filter(x=>x===id||state.agreementTypes.includes(x));renderMain();return}
+    if(e.target.closest('#agreement-format-trigger')){state.agreementFilterOpen=!state.agreementFilterOpen;renderMain();return}
+    if(e.target.closest('#save-claims'))return saveClaims();
+    const claimsCmd=e.target.closest('[data-claims-command]');if(claimsCmd){const editor=$('#claims-rich-content');editor?.focus();document.execCommand('styleWithCSS',false,'false');document.execCommand(claimsCmd.dataset.claimsCommand,false,null);if(editor){state.claimsDraft=sanitizeAgreementHtml(editor.innerHTML);updateSaveState()}return}
+    if(e.target.closest('#agreement-search-btn')){state.agreementSearch=state.agreementQuery;state.agreementSearchTypes=[...state.agreementTypes];state.agreementFilterOpen=false;renderMain();return}
+    if(e.target.closest('#agreement-reset-btn')){state.agreementSearch='';state.agreementQuery='';state.agreementTypes=[];state.agreementSearchTypes=[];state.agreementFilterOpen=false;renderMain();return}
+
+    if(e.target.closest('#add-scheme'))return addRow();
+    if(e.target.closest('#save-schemes'))return savePlans();
+    if(e.target.closest('#save-rates'))return saveRates();
+    if(e.target.closest('#save-coverage'))return saveCoverage();
+    if(e.target.closest('#add-coverage'))return addCoverage();
+    const coverageRemove=e.target.closest('[data-coverage-remove]');if(coverageRemove)return removeCoverage(coverageRemove.dataset.coverageRemove);
+    const note=e.target.closest('[data-coverage-note]');if(note)return openCoverageNote(note.dataset.coverageNote);
+    if(e.target.closest('#go-plans'))return switchModule('plans');
+    const remove=e.target.closest('[data-remove]');if(remove)return deleteRow(remove.dataset.remove);
+  });
+  $('#config-main').addEventListener('focusin',e=>{if(state.active==='display'&&e.target.id==='display-tag-search'){displayTagsOpen=true;updateDisplayTags()}});
+  $('#config-main').addEventListener('keydown',e=>{if(e.target.id==='display-tag-search'&&e.key==='Escape'){e.preventDefault();displayTagsOpen=false;const pop=$('#display-tag-pop');if(pop)pop.hidden=true;e.target.blur()}});
+  $('#config-main').addEventListener('change',e=>{
+    if(state.active!=='display')return;
+    if(e.target.id==='display-image-input'){displayHandleMainImage(e.target.files?.[0]);e.target.value='';return}
+    if(e.target.id==='display-rich-image-input'){displayInsertRichImage(e.target.files?.[0]);e.target.value='';return}
+    if(e.target.id==='display-age-unit'){state.displayDraft.age.unit=e.target.value;displayRefreshAge();return}
+    if(e.target.name==='display-effective'){state.displayDraft.effective.type=e.target.value;renderMain();return}
+  });
+  $('#config-main').addEventListener('input',e=>{if(state.active==='display'){
+    if(e.target.id==='display-tag-search'){displayTagSearch=e.target.value;displayTagsOpen=true;updateDisplayTags();return}
+    if(['display-intro','display-age-min','display-age-max','display-effective-note','display-rich-content'].includes(e.target.id)){displayMainInput(e);return}
+  }
+if(e.target.id==='claims-rich-content'){state.claimsDraft=sanitizeAgreementHtml(e.target.innerHTML);updateSaveState()}if(e.target.id==='agreement-search-input')state.agreementQuery=e.target.value;if(e.target.matches('input[data-field]'))updateField(e.target);if(e.target.matches('input[data-price-plan]'))updateRateField(e.target);if(e.target.matches('textarea[data-cov-scope],textarea[data-cov-value]'))updateCoverageField(e.target)});
+  $('#config-main').addEventListener('mousedown',e=>{if(e.target.closest('[data-claims-command],[data-display-command]'))e.preventDefault()});
+  $('#config-main').addEventListener('paste',e=>{if(e.target.closest('#claims-rich-content,#display-rich-content')){e.preventDefault();document.execCommand('insertText',false,e.clipboardData.getData('text/plain'))}});
+  $('#config-main').addEventListener('focusout',e=>{if(e.target.matches('input[data-field]'))markTouched(e.target);if(e.target.matches('input[data-price-plan]'))blurRateField(e.target);});
+  $('#config-main').addEventListener('keydown',e=>{if(e.target.id==='agreement-search-input'&&e.key==='Enter'){state.agreementSearch=state.agreementQuery;state.agreementSearchTypes=[...state.agreementTypes];state.agreementFilterOpen=false;renderMain()}});
+  $('#config-main').addEventListener('keydown',e=>{if(e.target.id==='agreement-format-trigger'&&['Enter',' '].includes(e.key)){e.preventDefault();state.agreementFilterOpen=!state.agreementFilterOpen;renderMain();$('#agreement-format-trigger')?.focus()}else if(e.key==='Escape'&&state.agreementFilterOpen){state.agreementFilterOpen=false;renderMain();$('#agreement-format-trigger')?.focus()}});
+  $('#config-main').addEventListener('keydown',e=>{const h=e.target.closest('[data-faq-drag]');if(!h||!e.altKey||!['ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();const at=state.faqs.findIndex(x=>x.id===h.dataset.faqDrag),next=at+(e.key==='ArrowUp'?-1:1);if(next<0||next>=state.faqs.length)return;const [v]=state.faqs.splice(at,1);state.faqs.splice(next,0,v);faqPersist();renderMain();document.querySelector(`[data-faq-drag="${v.id}"]`)?.focus();});
+  $('#config-main').addEventListener('dragstart',e=>{const h=e.target.closest('[data-faq-drag]');if(!h)return;state.faqDragId=h.dataset.faqDrag;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',state.faqDragId);setTimeout(()=>h.closest('.faq-card')?.classList.add('dragging'),0)});
+  $('#config-main').addEventListener('dragover',e=>{if(!state.faqDragId)return;const card=e.target.closest('.faq-card');document.querySelectorAll('.faq-card').forEach(x=>x.classList.remove('drop-before','drop-after'));if(!card)return;e.preventDefault();e.dataTransfer.dropEffect='move';const r=card.getBoundingClientRect();state.faqDragTarget=card.dataset.faqId;state.faqDragAfter=e.clientY>r.top+r.height/2;if(state.faqDragTarget!==state.faqDragId)card.classList.add(state.faqDragAfter?'drop-after':'drop-before')});
+  $('#config-main').addEventListener('drop',e=>{if(!state.faqDragId)return;e.preventDefault();const from=state.faqDragId,to=e.target.closest('.faq-card')?.dataset.faqId||state.faqDragTarget,after=state.faqDragAfter;faqDragClear();faqMove(from,to,after)});
+  $('#config-main').addEventListener('dragend',()=>faqDragClear());
+  $('#config-main').addEventListener('keydown',e=>{const h=e.target.closest('[data-coverage-drag]');if(!h||!e.altKey||!['ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();const idx=state.coverageDraft.findIndex(x=>x.id===h.dataset.coverageDrag),next=idx+(e.key==='ArrowUp'?-1:1);if(next<0||next>=state.coverageDraft.length)return;const [row]=state.coverageDraft.splice(idx,1);state.coverageDraft.splice(next,0,row);renderMain();document.querySelector(`[data-coverage-drag="${row.id}"]`)?.focus();});
+  $('#config-main').addEventListener('keydown',e=>{const handle=e.target.closest('[data-drag]');if(!handle||!e.altKey||!['ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();const idx=state.draft.findIndex(x=>x.id===handle.dataset.drag);const other=idx+(e.key==='ArrowUp'?-1:1);if(other<0||other>=state.draft.length)return;const [row]=state.draft.splice(idx,1);state.draft.splice(other,0,row);renderMain();const next=$(`[data-drag="${row.id}"]`);next?.focus()});
+  $('#config-main').addEventListener('dragstart',e=>{const handle=e.target.closest('[data-coverage-drag]');if(!handle)return;state.coverageDragId=handle.dataset.coverageDrag;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',state.coverageDragId);const row=handle.closest('.coverage-row');setTimeout(()=>row?.classList.add('dragging'),0)});
+  $('#config-main').addEventListener('dragover',e=>{if(!state.coverageDragId)return;const row=e.target.closest('.coverage-row');if(!row){document.querySelectorAll('.coverage-row').forEach(x=>x.classList.remove('drop-before','drop-after'));return}e.preventDefault();e.dataTransfer.dropEffect='move';const rect=row.getBoundingClientRect(),after=e.clientY>rect.top+rect.height/2;state.coverageDragTarget=row.dataset.coverageRow;state.coverageDragAfter=after;document.querySelectorAll('.coverage-row').forEach(x=>x.classList.remove('drop-before','drop-after'));if(row.dataset.coverageRow!==state.coverageDragId)row.classList.add(after?'drop-after':'drop-before')});
+  $('#config-main').addEventListener('drop',e=>{if(!state.coverageDragId)return;e.preventDefault();const from=state.coverageDragId,to=e.target.closest('.coverage-row')?.dataset.coverageRow||state.coverageDragTarget,after=state.coverageDragAfter;coverageDragClear();moveCoverage(from,to,after)});
+  $('#config-main').addEventListener('dragend',()=>coverageDragClear());
+  $('#config-main').addEventListener('dragstart',e=>{const handle=e.target.closest('[data-drag]');if(!handle)return;state.dragId=handle.dataset.drag;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',state.dragId);const row=handle.closest('.scheme-row');setTimeout(()=>row?.classList.add('dragging'),0)});
+  $('#config-main').addEventListener('dragover',e=>{if(!state.dragId)return;const row=e.target.closest('.scheme-row');if(!row){document.querySelectorAll('.scheme-row').forEach(x=>x.classList.remove('drop-before','drop-after'));return}e.preventDefault();e.dataTransfer.dropEffect='move';const rect=row.getBoundingClientRect(),after=e.clientY>rect.top+rect.height/2;state.dragTarget=row.dataset.row;state.dragAfter=after;document.querySelectorAll('.scheme-row').forEach(x=>x.classList.remove('drop-before','drop-after'));if(row.dataset.row!==state.dragId)row.classList.add(after?'drop-after':'drop-before')});
+  $('#config-main').addEventListener('drop',e=>{if(!state.dragId)return;e.preventDefault();const from=state.dragId,to=e.target.closest('.scheme-row')?.dataset.row||state.dragTarget,after=state.dragAfter;dragClear();moveRow(from,to,after)});
+  $('#config-main').addEventListener('dragend',()=>dragClear());
+  $('#modal-root').addEventListener('change',e=>{if(e.target.matches('[data-display-pick]')){displayPickerToggle(e.target);return}if(e.target.id==='agreement-upload-input'){agreementFileInputChanged(e.target.files,e.target.dataset.replaceId);e.target.value='';e.target.dataset.replaceId=''}});
+  $('#modal-root').addEventListener('paste',e=>{if(e.target.closest('#agreement-rich-content')){e.preventDefault();document.execCommand('insertText',false,e.clipboardData.getData('text/plain'))}});
+  $('#modal-root').addEventListener('mousedown',e=>{if(e.target.closest('[data-editor-command]'))e.preventDefault()});
+  $('#modal-root').addEventListener('input',e=>{if(state.modal?.type==='faq-editor'&&['faq-question-input','faq-answer-input'].includes(e.target.id))faqEditInput(e);if(state.modal?.type==='agreement-editor')agreementEditorSync(e);if(e.target.id==='coverage-note-text'){$('#coverage-note-count').textContent=Array.from(e.target.value).length+'/800'}});
+  $('#modal-root').addEventListener('click',e=>{
+    if(e.target.closest('#display-preview-close')||e.target.id==='display-image-backdrop'){closeDialog();return}
+    if(e.target.closest('#display-core-close,#display-core-close-bottom,#display-core-cancel')){closeDialog();return}
+    if(e.target.closest('#display-core-confirm')){displayConfirmCore();return}
+    if(e.target.closest('#faq-keep'))return $('#faq-unsaved-confirm')?.remove();
+    if(e.target.closest('#faq-discard'))return faqCloseEditor();
+    if(e.target.closest('#faq-close')||e.target.closest('#faq-cancel'))return faqRequestClose();
+    if(e.target.closest('#faq-submit'))return faqSubmit();
+    if(e.target.closest('#faq-delete-cancel'))return closeDialog();
+    if(e.target.closest('#faq-delete-confirm'))return faqDelete();
+    if(e.target.closest('#faq-backdrop')&&e.target.id==='faq-backdrop')return faqRequestClose();
+    if(e.target.closest('#agreement-keep'))return $('#agreement-discard-confirm')?.remove();
+    if(e.target.closest('#agreement-discard')){closeDialog();state.agreementEdit=null;return}
+    if(e.target.closest('#agreement-close')||e.target.closest('#agreement-cancel'))return agreementRequestClose();
+    if(e.target.closest('#agreement-submit'))return agreementSubmit();
+    if(e.target.closest('#agreement-preview-close')||e.target.closest('#agreement-delete-cancel'))return closeDialog();
+    if(e.target.closest('#agreement-delete-confirm'))return confirmAgreementDelete();
+    const cmd=e.target.closest('[data-editor-command]');if(cmd){const field=$('#agreement-rich-content');field?.focus();document.execCommand('styleWithCSS',false,'false');document.execCommand(cmd.dataset.editorCommand,false,null);if(field){state.agreementEdit.html=sanitizeAgreementHtml(field.innerHTML);updateAgreementEditorSaveState()}return}
+    const remove=e.target.closest('[data-agreement-remove-file]');if(remove){state.agreementEdit.files=state.agreementEdit.files.filter(f=>f.id!==remove.dataset.agreementRemoveFile);agreementRenderFiles();updateAgreementEditorSaveState();return}
+    const replace=e.target.closest('[data-agreement-replace]');if(replace){const inp=$('#agreement-upload-input');inp.dataset.replaceId=replace.dataset.agreementReplace;inp.click();return}
+    const preview=e.target.closest('[data-agreement-attach-preview]');if(preview){const file=state.agreementEdit.files.find(f=>f.id===preview.dataset.agreementAttachPreview);if(file)return previewAgreementFile(state.agreementEdit.id||'',file.id)}
+if(e.target.closest('#coverage-note-cancel'))return closeDialog();if(e.target.closest('#coverage-note-apply'))return applyCoverageNote();if(e.target.closest('#keep-editing'))return closeDialog();if(e.target.closest('#discard-editing'))return discardAndSwitch()});
+  document.addEventListener('click',e=>{if(state.active==='display'&&displayTagsOpen&&!e.target.closest('#display-tag-picker')){displayTagsOpen=false;const pop=$('#display-tag-pop');if(pop)pop.hidden=true}if(state.active==='agreement'&&state.agreementFilterOpen&&!e.target.closest('#agreement-format-select')){state.agreementFilterOpen=false;renderMain()}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.modal){if($('#agreement-discard-confirm'))$('#agreement-discard-confirm').remove();else if($('#faq-unsaved-confirm'))$('#faq-unsaved-confirm').remove();else if(state.modal.type==='faq-editor')faqRequestClose();else if(state.modal.type==='agreement-editor')agreementRequestClose();else closeDialog()}});
+  $('#config-main').addEventListener('keydown',e=>{const h=e.target.closest('[data-display-core-drag]');if(!h||!e.altKey||!['ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();const ids=state.displayDraft.coverageIds,at=ids.indexOf(h.dataset.displayCoreDrag),n=at+(e.key==='ArrowUp'?-1:1);if(n<0||n>=ids.length)return;[ids[at],ids[n]]=[ids[n],ids[at]];renderMain();$('#config-main [data-display-core-drag=+h.dataset.displayCoreDrag+]')?.focus()});
+  $('#config-main').addEventListener('dragstart',e=>{const h=e.target.closest('[data-display-core-drag]');if(!h)return;displayCoreDrag=h.dataset.displayCoreDrag;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',displayCoreDrag);setTimeout(()=>h.closest('.display-core-row')?.classList.add('dragging'),0)});
+  $('#config-main').addEventListener('dragover',e=>{if(!displayCoreDrag)return;const row=e.target.closest('.display-core-row');document.querySelectorAll('.display-core-row').forEach(x=>x.classList.remove('drop-before','drop-after'));if(!row)return;e.preventDefault();e.dataTransfer.dropEffect='move';const rect=row.getBoundingClientRect();displayCoreTarget=row.dataset.displayCoreRow;displayCoreAfter=e.clientY>rect.top+rect.height/2;if(displayCoreTarget!==displayCoreDrag)row.classList.add(displayCoreAfter?'drop-after':'drop-before')});
+  $('#config-main').addEventListener('drop',e=>{if(!displayCoreDrag)return;e.preventDefault();const from=displayCoreDrag,to=e.target.closest('.display-core-row')?.dataset.displayCoreRow||displayCoreTarget,after=displayCoreAfter;displayCoreDragClear();displayMoveCore(from,to,after)});
+  $('#config-main').addEventListener('dragend',()=>displayCoreDragClear());
+  window.addEventListener('beforeunload',e=>{if(isDirty()||isRatesDirty()||isCoverageDirty()||isClaimsDirty()||isDisplayDirty()||agreementEditorDirty()||faqEditorDirty()){e.preventDefault();e.returnValue=''}});
+  renderAll();
+})();
+</script>
+</body>
+</html>
